@@ -1,0 +1,167 @@
+{
+  "company": "Công ty Minh An",
+  "policies": [
+    {
+      "policy_id": "POL-DISC-REP",
+      "role": "Nhân viên Kinh doanh",
+      "max_discount_pct": 10,
+      "approver": "Tự duyệt (NVKD)",
+      "description": "NVKD được phép đề xuất chiết khấu tối đa 10% nếu đủ tồn kho, kịp thời hạn và trong ngân sách."
+    },
+    {
+      "policy_id": "POL-DISC-MGR",
+      "role": "Trưởng phòng Kinh doanh",
+      "max_discount_pct": 20,
+      "approver": "Trưởng phòng Kinh doanh",
+      "description": "Chiết khấu > 10% đến 20% phải lập Phiếu chuyển duyệt trình Trưởng phòng Kinh doanh."
+    },
+    {
+      "policy_id": "POL-DISC-DIR",
+      "role": "Ban Giám đốc",
+      "max_discount_pct": 35,
+      "approver": "Ban Giám đốc",
+      "description": "Chiết khấu > 20% phải lập Phiếu chuyển duyệt trình Ban Giám đốc."
+    }
+  ],
+  "products": [
+    {
+      "sku": "SRV-DELL-R750",
+      "name": "Máy chủ Dell PowerEdge R750",
+      "category": "Thiết bị hạ tầng",
+      "unit_price": 120000000,
+      "available_stock": 8,
+      "lead_time_days": 7
+    },
+    {
+      "sku": "SW-CISCO-9200",
+      "name": "Switch Cisco Catalyst 9200L 24-Port",
+      "category": "Thiết bị mạng",
+      "unit_price": 45000000,
+      "available_stock": 15,
+      "lead_time_days": 5
+    },
+    {
+      "sku": "FW-FORTI-100F",
+      "name": "Tường lửa FortiGate 100F",
+      "category": "An toàn thông tin",
+      "unit_price": 65000000,
+      "available_stock": 6,
+      "lead_time_days": 6
+    },
+    {
+      "sku": "SVC-DEPLOY-PRO",
+      "name": "Gói dịch vụ triển khai & cấu hình hệ thống",
+      "category": "Dịch vụ kỹ thuật",
+      "unit_price": 25000000,
+      "available_stock": 20,
+      "lead_time_days": 4
+    },
+    {
+      "sku": "LAP-THINK-X1",
+      "name": "Laptop Lenovo ThinkPad X1 Carbon",
+      "category": "Thiết bị đầu cuối",
+      "unit_price": 38000000,
+      "available_stock": 12,
+      "lead_time_days": 3
+    }
+  ],
+  "requests": [
+    {
+      "request_id": "YC-001",
+      "channel": "Email",
+      "sales_rep": "Nguyễn Văn An",
+      "customer_name": "Công ty CP Công nghệ Sao Việt",
+      "raw_text": "Chào Minh An, chúng tôi cần mua 2 Máy chủ Dell PowerEdge R750 (SRV-DELL-R750) và 2 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200). Ngân sách dự kiến 320.000.000 VNĐ, thời hạn triển khai trong 10 ngày. Đề nghị chiết khấu 5%. Người phê duyệt: Ông Trần Minh Đức (Giám đốc IT).",
+      "test_category": "Thông thường - Đủ điều kiện"
+    },
+    {
+      "request_id": "YC-002",
+      "channel": "Biểu mẫu Web",
+      "sales_rep": "Lê Thị Bình",
+      "customer_name": "Tập đoàn Logistics Đông Á",
+      "raw_text": "Đề nghị báo giá 3 Tường lửa FortiGate 100F (FW-FORTI-100F) và 1 Gói dịch vụ triển khai & cấu hình hệ thống (SVC-DEPLOY-PRO). Ngân sách 200.000.000 VNĐ. Cần hoàn thành trong 10 ngày. Chiết khấu đề nghị 15%. Người phê duyệt: Bà Phạm Thu Hà (CFO).",
+      "test_category": "Thông thường - Vượt quyền NVKD (Chờ duyệt TP)"
+    },
+    {
+      "request_id": "YC-003",
+      "channel": "Email",
+      "sales_rep": "Trần Quốc Cường",
+      "customer_name": "Bệnh viện Đa khoa Hoàn Mỹ",
+      "raw_text": "Chúng tôi cần gấp 10 Máy chủ Dell PowerEdge R750 (SRV-DELL-R750). Ngân sách 1.250.000.000 VNĐ, thời hạn triển khai 14 ngày, chiết khấu 5%. Người phê duyệt: BS Nguyễn Hữu Tín.",
+      "test_category": "Thông thường - Thiếu tồn kho (Chưa đáp ứng)"
+    },
+    {
+      "request_id": "YC-004",
+      "channel": "Email",
+      "sales_rep": "Phạm Minh Dũng",
+      "customer_name": "Ngân hàng TMCP Phương Nam",
+      "raw_text": "Cần mua 2 Tường lửa FortiGate 100F (FW-FORTI-100F), ngân sách 135.000.000 VNĐ, yêu cầu giao và triển khai xong trong 4 ngày. Chiết khấu 0%. Người phê duyệt: Ông Lê Hoàng Nam.",
+      "test_category": "Thông thường - Không kịp thời hạn (Chưa đáp ứng)"
+    },
+    {
+      "request_id": "YC-005",
+      "channel": "Biểu mẫu Web",
+      "sales_rep": "Nguyễn Văn An",
+      "customer_name": "Công ty TNHH Kiến trúc Xanh",
+      "raw_text": "Xin báo giá 5 Laptop Lenovo ThinkPad X1 Carbon (LAP-THINK-X1). Cần giao trong 7 ngày, chiết khấu 5%. Người phê duyệt: Bà Vũ Ngọc Mai.",
+      "test_category": "Thiếu dữ liệu - Thiếu ngân sách"
+    },
+    {
+      "request_id": "YC-006",
+      "channel": "Email",
+      "sales_rep": "Hoàng Thị Lan",
+      "customer_name": "Công ty CP Dược phẩm An Khang",
+      "raw_text": "Gửi Minh An, bên mình cần 4 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200), ngân sách khoảng 180.000.000 VNĐ, chiết khấu 5%.",
+      "test_category": "Thiếu dữ liệu - Thiếu thời hạn & người phê duyệt"
+    },
+    {
+      "request_id": "YC-007",
+      "channel": "Email",
+      "sales_rep": "Lê Thị Bình",
+      "customer_name": "Trường ĐH Công nghệ Miền Trung",
+      "raw_text": "Đề nghị cung cấp 2 Thiết bị lưu trữ NAS Synology RS2423+ và 2 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200). Ngân sách 250.000.000 VNĐ, thời hạn 12 ngày, chiết khấu 5%. Người phê duyệt: TS Đỗ Văn Hùng.",
+      "test_category": "Thiếu dữ liệu - Sản phẩm ngoài danh mục"
+    },
+    {
+      "request_id": "YC-008",
+      "channel": "Biểu mẫu Web",
+      "sales_rep": "Trần Quốc Cường",
+      "customer_name": "Công ty TNHH Thương mại Hải Âu",
+      "raw_text": "Chúng tôi muốn đặt Laptop Lenovo ThinkPad X1 Carbon (LAP-THINK-X1) và 1 Gói dịch vụ triển khai & cấu hình hệ thống (SVC-DEPLOY-PRO). Ngân sách 200.000.000 VNĐ, thời hạn 10 ngày, chiết khấu 5%. Người phê duyệt: Ông Bùi Quang Vinh.",
+      "test_category": "Thiếu dữ liệu - Thiếu số lượng hạng mục"
+    },
+    {
+      "request_id": "YC-009",
+      "channel": "Email",
+      "sales_rep": "Phạm Minh Dũng",
+      "customer_name": "Công ty CP Vận tải Biển Đông",
+      "raw_text": "Cần 2 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200), ngân sách 85.000.000 VNĐ, thời hạn triển khai 7 ngày, đề nghị chiết khấu 10%. Người phê duyệt: Ông Nguyễn Tấn Phát.",
+      "test_category": "Ranh giới - Chiết khấu đúng 10% (Ngưỡng NVKD)"
+    },
+    {
+      "request_id": "YC-010",
+      "channel": "Email",
+      "sales_rep": "Hoàng Thị Lan",
+      "customer_name": "Công ty TNHH Điện tử Ánh Dương",
+      "raw_text": "Đặt mua 2 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200), ngân sách 85.000.000 VNĐ, thời hạn triển khai 7 ngày, đề nghị chiết khấu 10.5%. Người phê duyệt: Bà Lý Thanh Thảo.",
+      "test_category": "Ranh giới - Chiết khấu 10.5% (Vượt 0.5% -> Chờ duyệt)"
+    },
+    {
+      "request_id": "YC-011",
+      "channel": "Biểu mẫu Web",
+      "sales_rep": "Nguyễn Văn An",
+      "customer_name": "Công ty CP Cơ khí Tân Tiến",
+      "raw_text": "Cần đúng 6 Tường lửa FortiGate 100F (FW-FORTI-100F), ngân sách đúng 390.000.000 VNĐ, thời hạn triển khai 6 ngày, chiết khấu 0%. Người phê duyệt: Ông Võ Minh Tâm.",
+      "test_category": "Ranh giới - Tồn kho=SL, LeadTime=Deadline, Giá=Ngân sách"
+    },
+    {
+      "request_id": "YC-012",
+      "channel": "Email",
+      "sales_rep": "Lê Thị Bình",
+      "customer_name": "Tập đoàn Bán lẻ Toàn Cầu",
+      "raw_text": "Đặt hàng 5 Máy chủ Dell PowerEdge R750 (SRV-DELL-R750) và 5 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200). Ngân sách 650.000.000 VNĐ, thời hạn 14 ngày, đề nghị chiết khấu 22%. Người phê duyệt: Ông Đặng Quốc Bảo (CEO).",
+      "test_category": "Ranh giới - Chiết khấu 22% (Vượt 20% -> Chuyển BGĐ)"
+    }
+  ]
+}
+

@@ -1,0 +1,297 @@
+{
+  "report_date": "2026-11-12",
+  "summary": {
+    "total_opportunities": 12,
+    "total_target_vnd": 4550000000,
+    "total_recognized_sales_vnd": 1310000000,
+    "overall_completion_pct": 28.8,
+    "total_open_raw_vnd": 3530000000,
+    "total_weighted_forecast_vnd": 2242500000,
+    "anomaly_count": 5,
+    "top_note": "Đã chọn đủ 5 cơ hội hợp lệ có điểm ưu tiên cao nhất."
+  },
+  "audit_logs": [
+    {
+      "seq": 1,
+      "timestamp": "2026-11-12T08:56:26.837Z",
+      "step": "Bước 2: Làm sạch",
+      "entity_id": "BM-001",
+      "tool": "tool_merge_duplicates",
+      "input": {
+        "count": 2,
+        "sources": [
+          "CRM_Main.xlsx",
+          "Sales_Backup.csv"
+        ]
+      },
+      "output": {
+        "kept_stage": "Đàm phán",
+        "updated_at": "2026-11-10"
+      },
+      "rule_applied": "Giữ bản ghi cập nhật mới nhất"
+    },
+    {
+      "seq": 2,
+      "timestamp": "2026-11-12T08:56:26.838Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-001",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Đàm phán",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Cơ hội mở hợp lệ",
+        "include_open": true,
+        "weight": 0.75,
+        "weighted_value": 315000000
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 3,
+      "timestamp": "2026-11-12T08:56:26.838Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-002",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Đàm phán",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Cơ hội mở hợp lệ",
+        "include_open": true,
+        "weight": 0.75,
+        "weighted_value": 390000000
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 4,
+      "timestamp": "2026-11-12T08:56:26.838Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-003",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Đề xuất giải pháp",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Cơ hội mở hợp lệ",
+        "include_open": true,
+        "weight": 0.5,
+        "weighted_value": 180000000
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 5,
+      "timestamp": "2026-11-12T08:56:26.838Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-004",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Đàm phán",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Cơ hội mở hợp lệ",
+        "include_open": true,
+        "weight": 0.75,
+        "weighted_value": 232500000
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 6,
+      "timestamp": "2026-11-12T08:56:26.838Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-005",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Đề xuất giải pháp",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Cơ hội mở hợp lệ",
+        "include_open": true,
+        "weight": 0.5,
+        "weighted_value": 140000000
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 7,
+      "timestamp": "2026-11-12T08:56:26.838Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-006",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Đàm phán",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Thiếu thông tin",
+        "include_open": true,
+        "weight": 0.75,
+        "weighted_value": 712500000
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 8,
+      "timestamp": "2026-11-12T08:56:26.838Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-007",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Đề xuất giải pháp",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Quá hạn / Treo",
+        "include_open": true,
+        "weight": 0.5,
+        "weighted_value": 200000000
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 9,
+      "timestamp": "2026-11-12T08:56:26.838Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-008",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Đàm phán",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Mâu thuẫn (Mất khách chưa cập nhật)",
+        "include_open": false,
+        "weight": 0.75,
+        "weighted_value": 0
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 10,
+      "timestamp": "2026-11-12T08:56:26.843Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-009",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Đề xuất giải pháp",
+        "report_date": "2026-11-12",
+        "has_order": true
+      },
+      "output": {
+        "category": "Mâu thuẫn (Đã có đơn hàng)",
+        "include_open": false,
+        "weight": 0.5,
+        "weighted_value": 0
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 11,
+      "timestamp": "2026-11-12T08:56:26.843Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-010",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Khảo sát nhu cầu",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Thiếu thông tin",
+        "include_open": true,
+        "weight": 0.25,
+        "weighted_value": 0
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 12,
+      "timestamp": "2026-11-12T08:56:26.844Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-011",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Chốt thắng (Won)",
+        "report_date": "2026-11-12",
+        "has_order": true
+      },
+      "output": {
+        "category": "Đã chốt (Won)",
+        "include_open": false,
+        "weight": 1,
+        "weighted_value": 0
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 13,
+      "timestamp": "2026-11-12T08:56:26.844Z",
+      "step": "Bước 3-4: Trạng thái & Doanh số",
+      "entity_id": "BM-012",
+      "tool": "tool_evaluate_opportunity",
+      "input": {
+        "stage": "Khảo sát nhu cầu",
+        "report_date": "2026-11-12",
+        "has_order": false
+      },
+      "output": {
+        "category": "Cơ hội mở hợp lệ",
+        "include_open": true,
+        "weight": 0.25,
+        "weighted_value": 72500000
+      },
+      "rule_applied": "Tách đơn hàng đã ghi nhận khỏi cơ hội mở; nhân trọng số giai đoạn"
+    },
+    {
+      "seq": 14,
+      "timestamp": "2026-11-12T08:56:26.844Z",
+      "step": "Bước 5: KPI Nhân viên",
+      "entity_id": "ALL_REPS",
+      "tool": "tool_compute_rep_kpis",
+      "input": {
+        "rep_count": 10
+      },
+      "output": {
+        "total_recognized": 1310000000
+      },
+      "rule_applied": "Tách biệt doanh số từ bảng orders"
+    },
+    {
+      "seq": 15,
+      "timestamp": "2026-11-12T08:56:26.844Z",
+      "step": "Bước 6: Top 5 Ưu tiên",
+      "entity_id": "TOP_5",
+      "tool": "tool_select_top_priorities",
+      "input": {
+        "eligible_count": 6
+      },
+      "output": {
+        "selected_ids": [
+          "BM-002",
+          "BM-001",
+          "BM-004",
+          "BM-003",
+          "BM-005"
+        ],
+        "note": "Đã chọn đủ 5 cơ hội hợp lệ có điểm ưu tiên cao nhất."
+      },
+      "rule_applied": "Loại bỏ cơ hội thiếu thông tin xác nhận / mâu thuẫn / quá hạn"
+    }
+  ]
+}

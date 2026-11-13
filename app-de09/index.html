@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI301 • Công ty Bình Minh — Tiến độ Cơ hội & Dự kiến Doanh số</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <!-- ================= MÀN HÌNH 1: WELCOME (MÀU HỒNG) ================= -->
+  <section id="welcomeScreen" class="screen welcome-screen">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="welcome-card">
+      <div class="welcome-emblem" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3c2.2 3.2 3.3 6.2 3.3 9.2a3.3 3.3 0 1 1-6.6 0c0-3 1.1-6 3.3-9.2z"/>
+          <path d="M5 10.5c2.4 1 4.2 3.4 4.8 6.2-2.8.5-5.3-1-6.2-3.4-.4-1-.2-2 1.4-2.8z"/>
+          <path d="M19 10.5c-2.4 1-4.2 3.4-4.8 6.2 2.8.5 5.3-1 6.2-3.4.4-1 .2-2-1.4-2.8z"/>
+          <path d="M4 19.5h16"/>
+        </svg>
+      </div>
+      <div class="welcome-tag">AI301 • Đề 09 • Công ty Bình Minh</div>
+      <h1 class="welcome-title">Quản lý Tiến độ Cơ hội &amp; Dự kiến Doanh số</h1>
+      <p class="welcome-desc">
+        Quy trình AI Agent 7 bước: Hợp nhất 6 nguồn dữ liệu theo ngày đối chiếu thống nhất, tách bạch doanh số đã ghi nhận khỏi cơ hội mở, tính dự kiến theo trọng số quy tắc và đề xuất Top 5 cơ hội ưu tiên tuần tới.
+      </p>
+      <button id="btnStartProcess" class="btn-start-flow">Bắt đầu quy trình →</button>
+      <div class="welcome-footer">
+        Hỗ trợ Link Google Sheet, CSV, Excel (.xlsx) • Có Nhật ký truy vết (Audit Log)
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MÀN HÌNH 2: DASHBOARD CHÍNH ================= -->
+  <section id="dashboardScreen" class="screen hidden">
+    <header class="topbar">
+      <div class="brand-row">
+        <div class="brand-logo">✦</div>
+        <span class="brand-name">AI301 • Bình Minh</span>
+        <span class="pill pill-amber">✨ Đề 09</span>
+        <span class="pill pill-mint">7-Step Agent</span>
+      </div>
+      <div class="brand-row">
+        <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Ngày đối chiếu:</label>
+        <input id="reportDate" type="date" value="2026-11-12" style="width:140px; padding:5px 8px; border-radius:999px; border:1px solid var(--border); font-size:12px;" />
+        <button id="btnBackWelcome" class="top-btn">← Màn hình đầu</button>
+        <button id="btnExportAll" class="top-btn top-btn-pink" disabled>⬇ Xuất JSON</button>
+      </div>
+    </header>
+
+    <div class="dash-grid">
+      <!-- CỘT TRÁI -->
+      <div>
+        <!-- Luồng 7 Bước -->
+        <div class="win-card">
+          <div class="win-head">
+            <div class="win-title-wrap">
+              <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+              <span>Luồng 7 Bước</span>
+            </div>
+            <span id="flowStatusPill" class="pill pill-mint">Sẵn sàng</span>
+          </div>
+
+          <div class="steps-track">
+            <div class="step-node" id="step1" title="B1: Tiếp nhận">1</div>
+            <div class="step-node" id="step2" title="B2: Làm sạch">2</div>
+            <div class="step-node" id="step3" title="B3: Trạng thái">3</div>
+            <div class="step-node" id="step4" title="B4: Doanh số">4</div>
+            <div class="step-node" id="step5" title="B5: Đánh giá">5</div>
+            <div class="step-node" id="step6" title="B6: Top 5">6</div>
+            <div class="step-node" id="step7" title="B7: Báo cáo">7</div>
+          </div>
+
+          <button id="btnRunAgent" class="btn-run-agent" disabled>CHẠY AGENT</button>
+
+          <div id="agentCallout" class="status-callout">
+            Chưa có dữ liệu. Hãy chọn <strong>Mẫu 1 / Mẫu 2</strong> hoặc tải File / Google Sheet bên dưới.
+          </div>
+        </div>
+
+        <!-- Dữ liệu vào (6 nguồn) -->
+        <div class="win-card">
+          <div class="win-head">
+            <div class="win-title-wrap">
+              <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+              <span>Dữ liệu vào (6 nguồn)</span>
+            </div>
+            <button id="btnResetData" style="border:none; background:none; color:#2563eb; font-size:12px; font-weight:700; cursor:pointer;">Reset</button>
+          </div>
+
+          <div class="sample-row" style="grid-template-columns:1fr 1fr;">
+            <button class="sample-pill active" id="btnSample1">Mẫu 1 (10 NVKD)</button>
+            <button class="sample-pill" id="btnSample2">Mẫu 2 (&lt;5 ưu tiên)</button>
+          </div>
+
+          <div class="mode-switch">
+            <button class="mode-btn active" id="tabFileMode">📄 File</button>
+            <button class="mode-btn" id="tabSheetMode">🔗 Sheet</button>
+          </div>
+
+          <div id="fileModeBox" class="dropzone">
+            <input id="fileInput" type="file" accept=".csv,.xlsx,.xls,.json" multiple style="width:100%; font-size:12px;" />
+            <div style="margin-top:6px;">Hỗ trợ <code>.xlsx</code> (6 sheet), nhiều <code>.csv</code> hoặc <code>.json</code></div>
+          </div>
+
+          <div id="sheetModeBox" class="dropzone" style="display:none;">
+            <input id="gsheetUrl" type="text" placeholder="Dán link Google Sheet công khai..." style="margin-bottom:8px;" />
+            <button id="btnLoadGSheet" class="top-btn top-btn-pink" style="width:100%;">Tải dữ liệu Google Sheet</button>
+          </div>
+
+          <div id="loadedSummary" class="muted" style="margin-top:10px;">Đang chờ nạp dữ liệu...</div>
+        </div>
+
+        <div class="hitl-pill">
+          🛡 Quy tắc: Tách doanh số đã bán khỏi cơ hội mở • Dự kiến là ước tính theo trọng số
+        </div>
+      </div>
+
+      <!-- CỘT PHẢI -->
+      <div>
+        <div class="tabs-bar">
+          <button class="tab-pill active" data-tab="tab-kpi">🏆 KPI &amp; Nhân viên</button>
+          <button class="tab-pill" data-tab="tab-top5">⭐ Top 5 Ưu tiên</button>
+          <button class="tab-pill" data-tab="tab-anomalies">⚠ Cảnh báo &amp; Dữ liệu sạch</button>
+          <button class="tab-pill" data-tab="tab-logs">🔧 Nhật ký</button>
+          <button class="tab-pill" data-tab="tab-selftest">🧪 Self-Test</button>
+        </div>
+
+        <!-- TAB 1: KPI NHÂN VIÊN -->
+        <div id="tab-kpi" class="tab-panel active">
+          <div class="highlights-grid">
+            <div class="hl-card hl-pink">
+              <div class="hl-top">
+                <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <span>💰 DOANH SỐ ĐÃ GHI NHẬN</span>
+                <span class="hl-badge" id="hlCompletionPct">0% Mục tiêu</span>
+              </div>
+              <div class="hl-big" id="hlRecognizedSales">0 VNĐ</div>
+              <div class="hl-sub">Tổng hợp từ bảng <code>orders</code> (tách biệt hoàn toàn khỏi cơ hội đang mở).</div>
+            </div>
+
+            <div class="hl-card hl-purple">
+              <div class="hl-top">
+                <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <span>📈 DỰ KIẾN CƠ HỘI MỞ (TRỌNG SỐ)</span>
+                <span class="hl-badge">Ước tính quy tắc</span>
+              </div>
+              <div class="hl-big" id="hlWeightedForecast">0 VNĐ</div>
+              <div class="hl-sub">Ước tính theo trọng số giai đoạn (không phải doanh số chắc chắn). Giá trị thô mở: <strong id="hlOpenRaw">0 VNĐ</strong>.</div>
+            </div>
+
+            <div class="hl-card hl-mint">
+              <div class="hl-top">
+                <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <span>✨ TÓM TẮT TUẦN</span>
+                <span class="hl-badge" id="hlAnomalyBadge">0 Cảnh báo</span>
+              </div>
+              <div class="hl-sub" style="color:#334155; margin-top:6px;" id="hlTopNote">
+                Chạy Agent để xem đánh giá Top 5 cơ hội ưu tiên tuần tiếp theo.
+              </div>
+            </div>
+          </div>
+
+          <div class="win-card">
+            <div class="win-head">
+              <div class="win-title-wrap">
+                <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <span>Bảng kết quả theo 10 Nhân viên Kinh doanh</span>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>NVKD</th>
+                    <th>Mục tiêu kỳ</th>
+                    <th>Đã ghi nhận (Orders)</th>
+                    <th>% Hoàn thành</th>
+                    <th>Cơ hội mở (Thô)</th>
+                    <th>Dự kiến (Trọng số)</th>
+                    <th>Cảnh báo</th>
+                  </tr>
+                </thead>
+                <tbody id="repTableBody">
+                  <tr><td colspan="7" class="muted">Đang tải dữ liệu...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style="text-align:center; margin-top:4px;">
+            <button id="btnJumpTop5" class="top-btn" style="width:100%; padding:11px; border-radius:14px; font-weight:700; color:#be185d;">
+              👁 Xem chi tiết Top 5 cơ hội ưu tiên tuần tới •
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 2: TOP 5 ƯU TIÊN -->
+        <div id="tab-top5" class="tab-panel">
+          <div class="win-card">
+            <div class="win-head">
+              <div class="win-title-wrap">
+                <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <span>Danh sách Top 5 cơ hội ưu tiên xử lý tuần tiếp theo</span>
+              </div>
+              <span id="top5CountBadge" class="pill pill-pink">0/5 cơ hội</span>
+            </div>
+            <div id="top5ReasonBanner" class="status-callout" style="margin-top:0; margin-bottom:14px;">Chưa có dữ liệu.</div>
+            <table>
+              <thead><tr><th>Hạng</th><th>Cơ hội &amp; Khách hàng</th><th>Giá trị &amp; Trọng số</th><th>Điểm ưu tiên</th><th>Căn cứ &amp; Việc cần làm</th></tr></thead>
+              <tbody id="top5TableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 3: CẢNH BÁO & DỮ LIỆU SẠCH -->
+        <div id="tab-anomalies" class="tab-panel">
+          <div class="win-card">
+            <div class="win-head">
+              <div class="win-title-wrap">
+                <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <span>Cảnh báo bất thường (Thiếu thông tin / Quá hạn / Mâu thuẫn)</span>
+              </div>
+            </div>
+            <table>
+              <thead><tr><th>Mã CH</th><th>Khách hàng</th><th>Loại cảnh báo</th><th>Chi tiết phát hiện</th><th>Đề xuất xử lý</th></tr></thead>
+              <tbody id="anomaliesTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="win-card">
+            <div class="win-head">
+              <div class="win-title-wrap">
+                <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <span>Bảng dữ liệu sạch sau hợp nhất</span>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead><tr><th>Mã CH</th><th>Khách hàng</th><th>Giai đoạn chốt</th><th>Giá trị</th><th>Trọng số</th><th>Dự kiến (Ước tính)</th><th>Phân loại</th></tr></thead>
+                <tbody id="cleanOppsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: NHẬT KÝ -->
+        <div id="tab-logs" class="tab-panel">
+          <div class="win-card">
+            <div class="win-head">
+              <div class="win-title-wrap">
+                <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <span>Nhật ký Truy vết (Audit Log)</span>
+              </div>
+            </div>
+            <div style="overflow-x:auto; max-height:520px;">
+              <table>
+                <thead><tr><th>#</th><th>Bước</th><th>Đối tượng</th><th>Tool Call</th><th>Input / Output</th><th>Quy tắc</th></tr></thead>
+                <tbody id="auditTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 5: SELF-TEST -->
+        <div id="tab-selftest" class="tab-panel">
+          <div class="win-card">
+            <div class="win-head">
+              <div class="win-title-wrap">
+                <div class="mac-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <span>Kiểm thử tự động Đề 09 (Thông thường / Thiếu DL / Ranh giới &lt;5 ưu tiên)</span>
+              </div>
+              <button id="btnRunSelfTest" class="top-btn top-btn-pink">Chạy Self-Test ngay</button>
+            </div>
+            <div id="selfTestResults" class="muted">Bấm "Chạy Self-Test ngay" để kiểm tra toàn bộ quy tắc Đề 09.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="js/main09.js"></script>
+</body>
+</html>
+

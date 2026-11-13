@@ -1,0 +1,4 @@
+policy_id,role,max_discount_pct,approver,description
+POL-DISC-REP,Nhân viên Kinh doanh,10,Tự duyệt (NVKD),"NVKD được phép đề xuất chiết khấu tối đa 10% nếu đủ tồn kho, kịp thời hạn và trong ngân sách."
+POL-DISC-MGR,Trưởng phòng Kinh doanh,20,Trưởng phòng Kinh doanh,Chiết khấu > 10% đến 20% phải lập Phiếu chuyển duyệt trình Trưởng phòng Kinh doanh.
+POL-DISC-DIR,Ban Giám đốc,35,Ban Giám đốc,Chiết khấu > 20% phải lập Phiếu chuyển duyệt trình Ban Giám đốc.

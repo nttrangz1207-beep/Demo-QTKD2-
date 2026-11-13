@@ -1,0 +1,1840 @@
+{
+  "summary": {
+    "total_requests": 12,
+    "counts": {
+      "Có thể tiếp tục": 3,
+      "Cần bổ sung thông tin": 4,
+      "Chưa đáp ứng": 2,
+      "Chờ duyệt": 3
+    },
+    "values": {
+      "Có thể tiếp tục": 530850000,
+      "Cần bổ sung thông tin": 750500000,
+      "Chưa đáp ứng": 1270000000,
+      "Chờ duyệt": 911050000
+    },
+    "eligible_count": 6,
+    "eligible_total_value": 1441900000,
+    "generated_at": "2026-11-12T08:24:48.895Z"
+  },
+  "audit_logs": [
+    {
+      "seq": 1,
+      "timestamp": "2026-11-12T08:24:48.893Z",
+      "request_id": "YC-001",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Chào Minh An, chúng tôi cần mua 2 Máy chủ Dell PowerEdge R750 (SRV-DELL-R750) và 2 Switch Cisco Catalyst 9200L 24-Port (..."
+      },
+      "output": {
+        "items_count": 2,
+        "budget_vnd": 320000000,
+        "deadline_days": null,
+        "discount_pct": 5,
+        "missing_fields": [
+          "Thời hạn triển khai"
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 2,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-001",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SRV-DELL-R750"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SRV-DELL-R750",
+        "unit_price": 120000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 3,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-001",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SRV-DELL-R750",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 8,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (8 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 4,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-001",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SW-CISCO-9200"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SW-CISCO-9200",
+        "unit_price": 45000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 5,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-001",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SW-CISCO-9200",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 15,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (15 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 6,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-001",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": null,
+        "item_skus": [
+          "SRV-DELL-R750",
+          "SW-CISCO-9200"
+        ]
+      },
+      "output": {
+        "feasible": null,
+        "max_lead_time_days": 7,
+        "deadline_days": null,
+        "gap_days": null,
+        "reason": "Chưa xác định thời hạn triển khai từ khách hàng"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 7,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-001",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 330000000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 320000000
+      },
+      "output": {
+        "final_total": 313500000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 8,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-001",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 1,
+        "stock_short_count": 0,
+        "lead_feasible": null,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Cần bổ sung thông tin",
+        "reasons": [
+          "Thiếu thông tin bắt buộc: Thời hạn triển khai."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 9,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-001",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Cần bổ sung thông tin",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Nguyễn Văn An liên hệ Công ty CP Công nghệ Sao Việt để bổ sung: Thời hạn triển khai.",
+        "owner": "Nguyễn Văn An",
+        "draft_length": 342
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 10,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-002",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Đề nghị báo giá 3 Tường lửa FortiGate 100F (FW-FORTI-100F) và 1 Gói dịch vụ triển khai & cấu hình hệ thống (SVC-DEPLOY-P..."
+      },
+      "output": {
+        "items_count": 2,
+        "budget_vnd": 200000000,
+        "deadline_days": 10,
+        "discount_pct": 15,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 11,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-002",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FW-FORTI-100F"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FW-FORTI-100F",
+        "unit_price": 65000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 12,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-002",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FW-FORTI-100F",
+        "requested_qty": 3
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 6,
+        "requested_qty": 3,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (6 >= 3)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 13,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-002",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SVC-DEPLOY-PRO"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SVC-DEPLOY-PRO",
+        "unit_price": 25000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 14,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-002",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SVC-DEPLOY-PRO",
+        "requested_qty": 1
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 20,
+        "requested_qty": 1,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (20 >= 1)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 15,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-002",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 10,
+        "item_skus": [
+          "FW-FORTI-100F",
+          "SVC-DEPLOY-PRO"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 6,
+        "deadline_days": 10,
+        "gap_days": 4,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 6 ngày <= yêu cầu 10 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 16,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-002",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 220000000,
+        "requested_discount_pct": 15,
+        "budget_vnd": 200000000
+      },
+      "output": {
+        "final_total": 187000000,
+        "within_budget": true,
+        "requires_approval": true,
+        "approver_required": "Trưởng phòng Kinh doanh",
+        "policy_id": "POL-DISC-MGR"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 17,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-002",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": true
+      },
+      "output": {
+        "status": "Chờ duyệt",
+        "reasons": [
+          "Đề nghị chiết khấu 15% vượt quyền NVKD (tối đa 10%). Cần Trưởng phòng Kinh doanh phê duyệt theo POL-DISC-MGR."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 18,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-002",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chờ duyệt",
+        "has_approval_slip": true
+      },
+      "output": {
+        "next_step": "Chuyển Phiếu duyệt cho Trưởng phòng Kinh doanh; tạm giữ báo giá, KHÔNG tự xác nhận bán hàng trước khi có phê duyệt.",
+        "owner": "Lê Thị Bình -> Trưởng phòng Kinh doanh",
+        "draft_length": 405
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 19,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-003",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Chúng tôi cần gấp 10 Máy chủ Dell PowerEdge R750 (SRV-DELL-R750). Ngân sách 1.250.000.000 VNĐ, thời hạn triển khai 14 ng..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 1250000000,
+        "deadline_days": 14,
+        "discount_pct": 5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 20,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-003",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SRV-DELL-R750"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SRV-DELL-R750",
+        "unit_price": 120000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 21,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-003",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SRV-DELL-R750",
+        "requested_qty": 10
+      },
+      "output": {
+        "sufficient": false,
+        "available_stock": 8,
+        "requested_qty": 10,
+        "shortfall": 2,
+        "reason": "Thiếu 2 đơn vị (tồn: 8, cần: 10)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 22,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-003",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 14,
+        "item_skus": [
+          "SRV-DELL-R750"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 7,
+        "deadline_days": 14,
+        "gap_days": 7,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 7 ngày <= yêu cầu 14 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 23,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-003",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 1200000000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 1250000000
+      },
+      "output": {
+        "final_total": 1140000000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 24,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-003",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 1,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Tồn kho không đủ cho SRV-DELL-R750: Thiếu 2 đơn vị (tồn: 8, cần: 10)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 25,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-003",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Trần Quốc Cường phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho Bệnh viện Đa khoa Hoàn Mỹ.",
+        "owner": "Trần Quốc Cường",
+        "draft_length": 467
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 26,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-004",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần mua 2 Tường lửa FortiGate 100F (FW-FORTI-100F), ngân sách 135.000.000 VNĐ, yêu cầu giao và triển khai xong trong 4 n..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 135000000,
+        "deadline_days": 4,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 27,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-004",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FW-FORTI-100F"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FW-FORTI-100F",
+        "unit_price": 65000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 28,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-004",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FW-FORTI-100F",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 6,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (6 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 29,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-004",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FW-FORTI-100F"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 6,
+        "deadline_days": 4,
+        "gap_days": 2,
+        "reason": "Không kịp thời hạn (cần 6 ngày > yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 30,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-004",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 130000000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 135000000
+      },
+      "output": {
+        "final_total": 130000000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 31,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-004",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 6 ngày > yêu cầu 4 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 32,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-004",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Phạm Minh Dũng phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho Ngân hàng TMCP Phương Nam.",
+        "owner": "Phạm Minh Dũng",
+        "draft_length": 446
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 33,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-005",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Xin báo giá 5 Laptop Lenovo ThinkPad X1 Carbon (LAP-THINK-X1). Cần giao trong 7 ngày, chiết khấu 5%. Người phê duyệt: Bà..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": null,
+        "deadline_days": 7,
+        "discount_pct": 5,
+        "missing_fields": [
+          "Ngân sách tổng"
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 34,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-005",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "LAP-THINK-X1"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "LAP-THINK-X1",
+        "unit_price": 38000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 35,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-005",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "LAP-THINK-X1",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 12,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (12 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 36,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-005",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 7,
+        "item_skus": [
+          "LAP-THINK-X1"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 3,
+        "deadline_days": 7,
+        "gap_days": 4,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 3 ngày <= yêu cầu 7 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 37,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-005",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 190000000,
+        "requested_discount_pct": 5,
+        "budget_vnd": null
+      },
+      "output": {
+        "final_total": 180500000,
+        "within_budget": null,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 38,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-005",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 1,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Cần bổ sung thông tin",
+        "reasons": [
+          "Thiếu thông tin bắt buộc: Ngân sách tổng."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 39,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-005",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Cần bổ sung thông tin",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Nguyễn Văn An liên hệ Công ty TNHH Kiến trúc Xanh để bổ sung: Ngân sách tổng.",
+        "owner": "Nguyễn Văn An",
+        "draft_length": 335
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 40,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-006",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Gửi Minh An, bên mình cần 4 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200), ngân sách khoảng 180.000.000 VNĐ, chiết..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 180000000,
+        "deadline_days": null,
+        "discount_pct": 5,
+        "missing_fields": [
+          "Thời hạn triển khai",
+          "Người phê duyệt phía khách hàng"
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 41,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-006",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SW-CISCO-9200"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SW-CISCO-9200",
+        "unit_price": 45000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 42,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-006",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SW-CISCO-9200",
+        "requested_qty": 4
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 15,
+        "requested_qty": 4,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (15 >= 4)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 43,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-006",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": null,
+        "item_skus": [
+          "SW-CISCO-9200"
+        ]
+      },
+      "output": {
+        "feasible": null,
+        "max_lead_time_days": 5,
+        "deadline_days": null,
+        "gap_days": null,
+        "reason": "Chưa xác định thời hạn triển khai từ khách hàng"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 44,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-006",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 180000000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 180000000
+      },
+      "output": {
+        "final_total": 171000000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 45,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-006",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 2,
+        "stock_short_count": 0,
+        "lead_feasible": null,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Cần bổ sung thông tin",
+        "reasons": [
+          "Thiếu thông tin bắt buộc: Thời hạn triển khai; Người phê duyệt phía khách hàng."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 46,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-006",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Cần bổ sung thông tin",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Hoàng Thị Lan liên hệ Công ty CP Dược phẩm An Khang để bổ sung: Thời hạn triển khai, Người phê duyệt phía khách hàng.",
+        "owner": "Hoàng Thị Lan",
+        "draft_length": 376
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 47,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-007",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Đề nghị cung cấp 2 Thiết bị lưu trữ NAS Synology RS2423+ và 2 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200). Ngân ..."
+      },
+      "output": {
+        "items_count": 2,
+        "budget_vnd": 250000000,
+        "deadline_days": 12,
+        "discount_pct": 5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 48,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-007",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "Thiết bị lưu trữ NAS Synology RS2423+"
+      },
+      "output": {
+        "found": false,
+        "match_type": "not_found",
+        "sku": null,
+        "unit_price": null
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 49,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-007",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "N/A",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": false,
+        "available_stock": 0,
+        "requested_qty": 2,
+        "shortfall": 2,
+        "reason": "Sản phẩm không có trong danh mục"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 50,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-007",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SW-CISCO-9200"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SW-CISCO-9200",
+        "unit_price": 45000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 51,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-007",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SW-CISCO-9200",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 15,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (15 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 52,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-007",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 12,
+        "item_skus": [
+          "UNKNOWN",
+          "SW-CISCO-9200"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 5,
+        "deadline_days": 12,
+        "gap_days": 7,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 5 ngày <= yêu cầu 12 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 53,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-007",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 90000000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 250000000
+      },
+      "output": {
+        "final_total": 85500000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 54,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-007",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 1,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Cần bổ sung thông tin",
+        "reasons": [
+          "Sản phẩm chưa có trong danh mục chuẩn: Thiết bị lưu trữ NAS Synology RS2423+."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 55,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-007",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Cần bổ sung thông tin",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Lê Thị Bình liên hệ Trường ĐH Công nghệ Miền Trung để bổ sung: .",
+        "owner": "Lê Thị Bình",
+        "draft_length": 393
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 56,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-008",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Chúng tôi muốn đặt Laptop Lenovo ThinkPad X1 Carbon (LAP-THINK-X1) và 1 Gói dịch vụ triển khai & cấu hình hệ thống (SVC-..."
+      },
+      "output": {
+        "items_count": 2,
+        "budget_vnd": 200000000,
+        "deadline_days": 10,
+        "discount_pct": 5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 57,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-008",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "LAP-THINK-X1"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "LAP-THINK-X1",
+        "unit_price": 38000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 58,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-008",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "LAP-THINK-X1",
+        "requested_qty": 1
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 12,
+        "requested_qty": 1,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (12 >= 1)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 59,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-008",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SVC-DEPLOY-PRO"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SVC-DEPLOY-PRO",
+        "unit_price": 25000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 60,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-008",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SVC-DEPLOY-PRO",
+        "requested_qty": 1
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 20,
+        "requested_qty": 1,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (20 >= 1)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 61,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-008",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 10,
+        "item_skus": [
+          "LAP-THINK-X1",
+          "SVC-DEPLOY-PRO"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 4,
+        "deadline_days": 10,
+        "gap_days": 6,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 4 ngày <= yêu cầu 10 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 62,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-008",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 63000000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 200000000
+      },
+      "output": {
+        "final_total": 59850000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 63,
+      "timestamp": "2026-11-12T08:24:48.894Z",
+      "request_id": "YC-008",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (4/10 ngày), trong ngân sách và chiết khấu 5% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 64,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-008",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Trần Quốc Cường gửi báo giá chính thức cho Công ty TNHH Thương mại Hải Âu và theo dõi xác nhận PO.",
+        "owner": "Trần Quốc Cường",
+        "draft_length": 743
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 65,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-009",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 2 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200), ngân sách 85.000.000 VNĐ, thời hạn triển khai 7 ngày, đề nghị..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 85000000,
+        "deadline_days": 7,
+        "discount_pct": 10,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 66,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-009",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SW-CISCO-9200"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SW-CISCO-9200",
+        "unit_price": 45000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 67,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-009",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SW-CISCO-9200",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 15,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (15 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 68,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-009",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 7,
+        "item_skus": [
+          "SW-CISCO-9200"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 5,
+        "deadline_days": 7,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 5 ngày <= yêu cầu 7 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 69,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-009",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 90000000,
+        "requested_discount_pct": 10,
+        "budget_vnd": 85000000
+      },
+      "output": {
+        "final_total": 81000000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 70,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-009",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (5/7 ngày), trong ngân sách và chiết khấu 10% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 71,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-009",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Phạm Minh Dũng gửi báo giá chính thức cho Công ty CP Vận tải Biển Đông và theo dõi xác nhận PO.",
+        "owner": "Phạm Minh Dũng",
+        "draft_length": 649
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 72,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-010",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Đặt mua 2 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200), ngân sách 85.000.000 VNĐ, thời hạn triển khai 7 ngày, đề ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 85000000,
+        "deadline_days": 7,
+        "discount_pct": 10.5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 73,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-010",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SW-CISCO-9200"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SW-CISCO-9200",
+        "unit_price": 45000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 74,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-010",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SW-CISCO-9200",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 15,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (15 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 75,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-010",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 7,
+        "item_skus": [
+          "SW-CISCO-9200"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 5,
+        "deadline_days": 7,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 5 ngày <= yêu cầu 7 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 76,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-010",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 90000000,
+        "requested_discount_pct": 10.5,
+        "budget_vnd": 85000000
+      },
+      "output": {
+        "final_total": 80550000,
+        "within_budget": true,
+        "requires_approval": true,
+        "approver_required": "Trưởng phòng Kinh doanh",
+        "policy_id": "POL-DISC-MGR"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 77,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-010",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": true
+      },
+      "output": {
+        "status": "Chờ duyệt",
+        "reasons": [
+          "Đề nghị chiết khấu 10.5% vượt quyền NVKD (tối đa 10%). Cần Trưởng phòng Kinh doanh phê duyệt theo POL-DISC-MGR."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 78,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-010",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chờ duyệt",
+        "has_approval_slip": true
+      },
+      "output": {
+        "next_step": "Chuyển Phiếu duyệt cho Trưởng phòng Kinh doanh; tạm giữ báo giá, KHÔNG tự xác nhận bán hàng trước khi có phê duyệt.",
+        "owner": "Hoàng Thị Lan -> Trưởng phòng Kinh doanh",
+        "draft_length": 410
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 79,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-011",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần đúng 6 Tường lửa FortiGate 100F (FW-FORTI-100F), ngân sách đúng 390.000.000 VNĐ, thời hạn triển khai 6 ngày, chiết k..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 390000000,
+        "deadline_days": 6,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 80,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-011",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FW-FORTI-100F"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FW-FORTI-100F",
+        "unit_price": 65000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 81,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-011",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FW-FORTI-100F",
+        "requested_qty": 6
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 6,
+        "requested_qty": 6,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (6 >= 6)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 82,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-011",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 6,
+        "item_skus": [
+          "FW-FORTI-100F"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 6,
+        "deadline_days": 6,
+        "gap_days": 0,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 6 ngày <= yêu cầu 6 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 83,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-011",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 390000000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 390000000
+      },
+      "output": {
+        "final_total": 390000000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 84,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-011",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (6/6 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 85,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-011",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Nguyễn Văn An gửi báo giá chính thức cho Công ty CP Cơ khí Tân Tiến và theo dõi xác nhận PO.",
+        "owner": "Nguyễn Văn An",
+        "draft_length": 624
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 86,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-012",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Đặt hàng 5 Máy chủ Dell PowerEdge R750 (SRV-DELL-R750) và 5 Switch Cisco Catalyst 9200L 24-Port (SW-CISCO-9200). Ngân sá..."
+      },
+      "output": {
+        "items_count": 2,
+        "budget_vnd": 650000000,
+        "deadline_days": 14,
+        "discount_pct": 22,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 87,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-012",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SRV-DELL-R750"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SRV-DELL-R750",
+        "unit_price": 120000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 88,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-012",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SRV-DELL-R750",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 8,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (8 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 89,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-012",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "SW-CISCO-9200"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "SW-CISCO-9200",
+        "unit_price": 45000000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 90,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-012",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "SW-CISCO-9200",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 15,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (15 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 91,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-012",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 14,
+        "item_skus": [
+          "SRV-DELL-R750",
+          "SW-CISCO-9200"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 7,
+        "deadline_days": 14,
+        "gap_days": 7,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 7 ngày <= yêu cầu 14 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 92,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-012",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 825000000,
+        "requested_discount_pct": 22,
+        "budget_vnd": 650000000
+      },
+      "output": {
+        "final_total": 643500000,
+        "within_budget": true,
+        "requires_approval": true,
+        "approver_required": "Ban Giám đốc",
+        "policy_id": "POL-DISC-DIR"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 93,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-012",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": true
+      },
+      "output": {
+        "status": "Chờ duyệt",
+        "reasons": [
+          "Đề nghị chiết khấu 22% vượt quyền NVKD (tối đa 10%). Cần Ban Giám đốc phê duyệt theo POL-DISC-DIR."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 94,
+      "timestamp": "2026-11-12T08:24:48.895Z",
+      "request_id": "YC-012",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chờ duyệt",
+        "has_approval_slip": true
+      },
+      "output": {
+        "next_step": "Chuyển Phiếu duyệt cho Ban Giám đốc; tạm giữ báo giá, KHÔNG tự xác nhận bán hàng trước khi có phê duyệt.",
+        "owner": "Lê Thị Bình -> Ban Giám đốc",
+        "draft_length": 396
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    }
+  ]
+}

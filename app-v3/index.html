@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MinhAn CRM — B2B Sales AI Agent (AI301 Đề 01)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div>
+        <div class="brand-title">MinhAn CRM</div>
+        <div class="nav-group">
+          <button class="nav-item active" data-view="view-kanban">
+            <span>Cơ hội B2B (Kanban)</span>
+            <span class="nav-count" id="navOppCount">0</span>
+          </button>
+          <button class="nav-item" data-view="view-summary">
+            <span>Tổng quan & Đề xuất</span>
+          </button>
+          <button class="nav-item" data-view="view-audit">
+            <span>Nhật ký Truy vết</span>
+            <span class="nav-count" id="navLogCount">0</span>
+          </button>
+          <button class="nav-item" data-view="view-selftest">
+            <span>Self-Test (Task 2)</span>
+          </button>
+          <button class="nav-item" data-view="view-catalog">
+            <span>Danh mục & Chính sách</span>
+          </button>
+        </div>
+
+        <div class="nav-label">Đội ngũ NVKD</div>
+        <div class="rep-list" id="repList">
+          <div class="rep-row"><div class="rep-avatar">NA</div><div><div>Nguyễn Văn An</div><div class="rep-role">B2B Sales</div></div></div>
+          <div class="rep-row"><div class="rep-avatar">LB</div><div><div>Lê Thị Bình</div><div class="rep-role">B2B Sales</div></div></div>
+          <div class="rep-row"><div class="rep-avatar">TC</div><div><div>Trần Quốc Cường</div><div class="rep-role">B2B Sales</div></div></div>
+          <div class="rep-row"><div class="rep-avatar">PD</div><div><div>Phạm Minh Dũng</div><div class="rep-role">B2B Sales</div></div></div>
+          <div class="rep-row"><div class="rep-avatar">HL</div><div><div>Hoàng Thị Lan</div><div class="rep-role">B2B Sales</div></div></div>
+        </div>
+      </div>
+
+      <div class="muted" style="padding:10px; border-top:1px solid var(--border); font-size:11.5px;">
+        <strong>Guardrail:</strong> Không tự xác nhận bán hàng khi thiếu dữ kiện hoặc vượt quyền.
+      </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <div class="main-area">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="search-wrap">
+          <input id="searchOpp" class="search-input" type="text" placeholder="Tìm khách hàng, Mã YC, NVKD..." />
+        </div>
+        <div class="top-actions">
+          <button id="btnLoadSample" class="btn">Nạp dữ liệu mẫu (12)</button>
+          <button id="btnDownloadTemplate" class="btn">Tải .XLSX mẫu</button>
+          <button id="btnRunSelfTest" class="btn">Self-Test</button>
+          <button id="btnRunAgent" class="btn btn-black" disabled>+ Chạy AI Agent</button>
+        </div>
+      </header>
+
+      <!-- WARM IVORY ANALYTICS BANNER -->
+      <section class="ivory-banner">
+        <div>
+          <div class="banner-title">Phân bổ cơ hội theo 4 trạng thái</div>
+          <div class="mini-bars" id="miniBars">
+            <div class="bar-col"><div class="bar-pair"><div class="bar-striped" style="height:24px;"></div><div class="bar-solid" style="height:40px;"></div></div><div class="bar-lbl">Tiếp tục</div></div>
+            <div class="bar-col"><div class="bar-pair"><div class="bar-striped" style="height:20px;"></div><div class="bar-solid" style="height:34px;"></div></div><div class="bar-lbl">Chờ duyệt</div></div>
+            <div class="bar-col"><div class="bar-pair"><div class="bar-striped" style="height:18px;"></div><div class="bar-solid" style="height:30px;"></div></div><div class="bar-lbl">Bổ sung</div></div>
+            <div class="bar-col"><div class="bar-pair"><div class="bar-striped" style="height:14px;"></div><div class="bar-solid" style="height:22px;"></div></div><div class="bar-lbl">Chưa ĐƯ</div></div>
+          </div>
+        </div>
+
+        <div class="gauge-wrap">
+          <svg width="160" height="86" viewBox="0 0 160 86">
+            <path d="M 16 78 A 64 64 0 0 1 144 78" fill="none" stroke="#dadad0" stroke-width="11" stroke-dasharray="3 4" />
+            <path id="gaugeArc" d="M 16 78 A 64 64 0 0 1 144 78" fill="none" stroke="#1c1c1c" stroke-width="11" stroke-dasharray="0 220" />
+          </svg>
+          <div class="gauge-pct" id="gaugePct">0%</div>
+          <div class="gauge-sub">Tỷ lệ cơ hội đủ điều kiện</div>
+        </div>
+
+        <div>
+          <div class="big-metric-num" id="metricEligibleCount">0</div>
+          <div class="big-metric-sub">Cơ hội đủ điều kiện<br>(Tiếp tục + Chờ duyệt) →</div>
+        </div>
+
+        <div>
+          <div class="big-metric-num" id="metricEligibleValue">0 VNĐ</div>
+          <div class="big-metric-sub">Tổng giá trị Pipeline đủ điều kiện<br>(Không gồm thiếu thông tin / chưa đáp ứng) →</div>
+        </div>
+      </section>
+
+      <!-- CONTENT -->
+      <div class="content-pad">
+        <!-- DATA INPUT STRIP -->
+        <div class="loader-strip">
+          <div>
+            <span class="field-lbl">Link Google Sheet (công khai)</span>
+            <div class="row">
+              <input id="gsheetUrl" type="text" class="grow" placeholder="https://docs.google.com/spreadsheets/d/..." />
+              <button id="btnLoadGSheet" class="btn btn-sm">Tải Sheet</button>
+            </div>
+          </div>
+          <div>
+            <span class="field-lbl">Upload CSV / Excel (.xlsx)</span>
+            <input id="fileInput" type="file" accept=".csv,.xlsx,.xls,.json" multiple />
+          </div>
+          <div>
+            <span class="field-lbl">Chế độ AI Agent</span>
+            <div class="row">
+              <select id="llmProvider">
+                <option value="offline">Offline NLP + Rule Engine</option>
+                <option value="gemini">Gemini API</option>
+                <option value="openai">OpenAI API</option>
+              </select>
+              <input id="llmApiKey" type="password" class="grow" placeholder="API Key..." style="display:none;" />
+            </div>
+          </div>
+        </div>
+
+        <div id="datasetSummary" class="muted" style="margin-bottom:16px;">
+          Chưa nạp dữ liệu. Bấm <strong>"Nạp dữ liệu mẫu (12)"</strong> ở góc trên bên phải hoặc tải Google Sheet / CSV / XLSX.
+        </div>
+
+        <!-- VIEW 1: KANBAN -->
+        <div id="view-kanban" class="view-panel active">
+          <div class="kanban-grid" id="kanbanBoard">
+            <div class="muted">Chạy AI Agent để hiển thị 4 cột Kanban cơ hội B2B.</div>
+          </div>
+        </div>
+
+        <!-- VIEW 2: SUMMARY & RECOMMENDATIONS -->
+        <div id="view-summary" class="view-panel">
+          <div class="card-box">
+            <h3 style="margin:0 0 12px;">Bảng tổng hợp phân loại & Giá trị đủ điều kiện</h3>
+            <table>
+              <thead><tr><th>Trạng thái</th><th>Số cơ hội</th><th>Tổng giá trị</th><th>Tính vào Pipeline đủ điều kiện?</th></tr></thead>
+              <tbody id="summaryTableBody"></tbody>
+            </table>
+          </div>
+          <div class="card-box">
+            <h3 style="margin:0 0 10px;">Đề xuất kinh doanh cho Trưởng phòng</h3>
+            <ul id="businessRecommendations" style="margin:0; padding-left:18px;"></ul>
+          </div>
+        </div>
+
+        <!-- VIEW 3: AUDIT LOG -->
+        <div id="view-audit" class="view-panel">
+          <div class="card-box">
+            <div class="row" style="justify-content:space-between; margin-bottom:12px;">
+              <div class="row">
+                <select id="filterLogReq"><option value="ALL">Tất cả Mã YC</option></select>
+                <span id="logSaveStatus" class="muted"></span>
+              </div>
+              <button id="btnExportLogs" class="btn btn-sm" disabled>Tải Audit Log (.json)</button>
+            </div>
+            <div style="overflow-x:auto; max-height:520px;">
+              <table>
+                <thead><tr><th>#</th><th>Mã YC</th><th>Skill</th><th>Tool Call</th><th>Input / Output</th><th>Quy tắc</th></tr></thead>
+                <tbody id="auditTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW 4: SELF-TEST -->
+        <div id="view-selftest" class="view-panel">
+          <div class="card-box" id="selfTestResults">
+            <p class="muted">Bấm <strong>"Self-Test"</strong> trên thanh công cụ để kiểm thử 12 ca chuẩn (Thông thường, Thiếu dữ liệu, Ranh giới).</p>
+          </div>
+        </div>
+
+        <!-- VIEW 5: CATALOG & POLICIES -->
+        <div id="view-catalog" class="view-panel">
+          <div class="card-box">
+            <h3 style="margin:0 0 10px;">Danh mục sản phẩm, giá & tồn kho</h3>
+            <table>
+              <thead><tr><th>SKU</th><th>Tên sản phẩm</th><th>Đơn giá</th><th>Tồn</th><th>Lead-time</th></tr></thead>
+              <tbody id="catalogTableBody"></tbody>
+            </table>
+          </div>
+          <div class="card-box">
+            <h3 style="margin:0 0 10px;">Chính sách chiết khấu & chuyển duyệt</h3>
+            <table>
+              <thead><tr><th>Mã</th><th>Vai trò</th><th>CK tối đa</th><th>Người duyệt</th></tr></thead>
+              <tbody id="policyTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE-OVER DOSSIER DRAWER -->
+  <div class="drawer-backdrop" id="drawerBackdrop">
+    <div class="drawer" id="drawerContent"></div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,66 @@
+{
+  "company": "Công ty Bình Minh",
+  "default_report_date": "2026-11-12",
+  "rules": {
+    "stage_weights": {
+      "Tiếp cận": 0.10,
+      "Khảo sát nhu cầu": 0.25,
+      "Đề xuất giải pháp": 0.50,
+      "Đàm phán": 0.75,
+      "Chốt thắng (Won)": 1.00,
+      "Mất khách (Lost)": 0.00
+    },
+    "stale_days_threshold": 14,
+    "top_n": 5
+  },
+  "sales_reps": [
+    { "rep_id": "NV01", "name": "Nguyễn Minh Quân", "target_vnd": 600000000 },
+    { "rep_id": "NV02", "name": "Trần Thu Trang", "target_vnd": 550000000 },
+    { "rep_id": "NV03", "name": "Lê Hoàng Nam", "target_vnd": 500000000 },
+    { "rep_id": "NV04", "name": "Phạm Ngọc Anh", "target_vnd": 500000000 },
+    { "rep_id": "NV05", "name": "Vũ Đức Thịnh", "target_vnd": 450000000 },
+    { "rep_id": "NV06", "name": "Đặng Thảo Vy", "target_vnd": 450000000 },
+    { "rep_id": "NV07", "name": "Bùi Quốc Bảo", "target_vnd": 400000000 },
+    { "rep_id": "NV08", "name": "Hoàng Gia Huy", "target_vnd": 400000000 },
+    { "rep_id": "NV09", "name": "Ngô Khánh Linh", "target_vnd": 350000000 },
+    { "rep_id": "NV10", "name": "Đỗ Tuấn Kiệt", "target_vnd": 350000000 }
+  ],
+  "opportunities": [
+    { "opp_id": "BM-001", "customer": "Tập đoàn Vận tải Biển Đông", "rep_id": "NV01", "stage": "Đàm phán", "value_vnd": 420000000, "expected_close_date": "2026-11-18", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-10" },
+    { "opp_id": "BM-001", "customer": "Tập đoàn Vận tải Biển Đông", "rep_id": "NV01", "stage": "Đề xuất giải pháp", "value_vnd": 420000000, "expected_close_date": "2026-11-18", "confirmed_info": true, "source_file": "Sales_Backup.csv", "updated_at": "2026-11-05" },
+    { "opp_id": "BM-002", "customer": "Ngân hàng Á Châu - CN HCM", "rep_id": "NV02", "stage": "Đàm phán", "value_vnd": 520000000, "expected_close_date": "2026-11-16", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-11" },
+    { "opp_id": "BM-003", "customer": "Công ty CP Dược Minh Tâm", "rep_id": "NV03", "stage": "Đề xuất giải pháp", "value_vnd": 360000000, "expected_close_date": "2026-11-19", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-09" },
+    { "opp_id": "BM-004", "customer": "Bệnh viện Quốc tế Hạnh Phúc", "rep_id": "NV04", "stage": "Đàm phán", "value_vnd": 310000000, "expected_close_date": "2026-11-17", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-10" },
+    { "opp_id": "BM-005", "customer": "Chuỗi Bán lẻ WinMart Pro", "rep_id": "NV05", "stage": "Đề xuất giải pháp", "value_vnd": 280000000, "expected_close_date": "2026-11-20", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-08" },
+    { "opp_id": "BM-006", "customer": "Tập đoàn Thép Hòa An", "rep_id": "NV06", "stage": "Đàm phán", "value_vnd": 950000000, "expected_close_date": "2026-11-19", "confirmed_info": false, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-07" },
+    { "opp_id": "BM-007", "customer": "Công ty Logistics Tân Cảng", "rep_id": "NV07", "stage": "Đề xuất giải pháp", "value_vnd": 400000000, "expected_close_date": "2026-11-01", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-10-18" },
+    { "opp_id": "BM-008", "customer": "Công ty TNHH May Mặc Việt Tiến", "rep_id": "NV08", "stage": "Đàm phán", "value_vnd": 340000000, "expected_close_date": "2026-11-22", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-02" },
+    { "opp_id": "BM-009", "customer": "Đại học Công nghệ Sài Gòn", "rep_id": "NV09", "stage": "Đề xuất giải pháp", "value_vnd": 260000000, "expected_close_date": "2026-11-15", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-06" },
+    { "opp_id": "BM-010", "customer": "Công ty Xây dựng An Phong", "rep_id": "NV10", "stage": "Khảo sát nhu cầu", "value_vnd": null, "expected_close_date": "", "confirmed_info": false, "source_file": "Sales_Note.csv", "updated_at": "2026-11-04" },
+    { "opp_id": "BM-011", "customer": "Công ty Thực phẩm Xanh", "rep_id": "NV01", "stage": "Chốt thắng (Won)", "value_vnd": 450000000, "expected_close_date": "2026-11-05", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-05" },
+    { "opp_id": "BM-012", "customer": "Công ty Điện lực Miền Trung", "rep_id": "NV02", "stage": "Khảo sát nhu cầu", "value_vnd": 290000000, "expected_close_date": "2026-11-28", "confirmed_info": true, "source_file": "CRM_Main.xlsx", "updated_at": "2026-11-10" }
+  ],
+  "status_history": [
+    { "opp_id": "BM-001", "changed_at": "2026-11-05", "stage": "Đề xuất giải pháp" },
+    { "opp_id": "BM-001", "changed_at": "2026-11-10", "stage": "Đàm phán" },
+    { "opp_id": "BM-009", "changed_at": "2026-11-06", "stage": "Đề xuất giải pháp" }
+  ],
+  "activities": [
+    { "opp_id": "BM-001", "activity_date": "2026-11-11", "type": "Họp chốt hợp đồng", "note": "Khách hàng đã xác nhận ngân sách và đầu mối ký." },
+    { "opp_id": "BM-002", "activity_date": "2026-11-11", "type": "Gửi báo giá cuối", "note": "Đã thống nhất SLA triển khai, chờ ký tuần tới." },
+    { "opp_id": "BM-003", "activity_date": "2026-11-10", "type": "Demo giải pháp", "note": "Giám đốc IT hài lòng, đủ thông tin xác nhận." },
+    { "opp_id": "BM-004", "activity_date": "2026-11-10", "type": "Thương thảo điều khoản", "note": "Đã xác nhận phạm vi & tiến độ." },
+    { "opp_id": "BM-005", "activity_date": "2026-11-09", "type": "Họp kỹ thuật", "note": "Đủ thông tin xác nhận, dự kiến chốt tuần sau." },
+    { "opp_id": "BM-006", "activity_date": "2026-11-07", "type": "Gọi điện", "note": "Giá trị lớn 950tr nhưng khách chưa xác nhận ngân sách và người duyệt." },
+    { "opp_id": "BM-007", "activity_date": "2026-10-18", "type": "Gửi email", "note": "Không có phản hồi mới từ 18/10." },
+    { "opp_id": "BM-008", "activity_date": "2026-11-08", "type": "Cuộc gọi", "note": "Khách hàng thông báo đã chọn nhà cung cấp khác (mất khách), nhưng NVKD chưa đổi trạng thái." },
+    { "opp_id": "BM-009", "activity_date": "2026-11-06", "type": "Đối chiếu đơn hàng", "note": "Khách đã ký hợp đồng và xuất đơn ORD-902." }
+  ],
+  "orders": [
+    { "order_id": "ORD-901", "opp_id": "BM-011", "rep_id": "NV01", "order_date": "2026-11-05", "amount_vnd": 450000000 },
+    { "order_id": "ORD-902", "opp_id": "BM-009", "rep_id": "NV09", "order_date": "2026-11-10", "amount_vnd": 260000000 },
+    { "order_id": "ORD-903", "opp_id": "BM-000", "rep_id": "NV02", "order_date": "2026-11-03", "amount_vnd": 380000000 },
+    { "order_id": "ORD-904", "opp_id": "BM-000", "rep_id": "NV03", "order_date": "2026-11-04", "amount_vnd": 220000000 }
+  ]
+}
+

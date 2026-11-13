@@ -1,0 +1,5462 @@
+{
+  "summary": {
+    "total_requests": 40,
+    "counts": {
+      "Có thể tiếp tục": 25,
+      "Cần bổ sung thông tin": 0,
+      "Chưa đáp ứng": 11,
+      "Chờ duyệt": 4
+    },
+    "values": {
+      "Có thể tiếp tục": 1479086900,
+      "Cần bổ sung thông tin": 0,
+      "Chưa đáp ứng": 467133600,
+      "Chờ duyệt": 86440600
+    },
+    "eligible_count": 29,
+    "eligible_total_value": 1565527500,
+    "generated_at": "2026-11-12T08:37:16.170Z"
+  },
+  "audit_logs": [
+    {
+      "seq": 1,
+      "timestamp": "2026-11-12T08:37:16.163Z",
+      "request_id": "FPT-ORD-102903",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 Garmin Forerunner 55 (FPT-P0026). Ngân sách 24.389.400 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu 5..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 24389400,
+        "deadline_days": 2,
+        "discount_pct": 5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 2,
+      "timestamp": "2026-11-12T08:37:16.163Z",
+      "request_id": "FPT-ORD-102903",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0026"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0026",
+        "unit_price": 4890000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 3,
+      "timestamp": "2026-11-12T08:37:16.163Z",
+      "request_id": "FPT-ORD-102903",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0026",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 4,
+      "timestamp": "2026-11-12T08:37:16.163Z",
+      "request_id": "FPT-ORD-102903",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0026"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 2,
+        "gap_days": 0,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 5,
+      "timestamp": "2026-11-12T08:37:16.163Z",
+      "request_id": "FPT-ORD-102903",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 24450000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 24389400
+      },
+      "output": {
+        "final_total": 23227500,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 6,
+      "timestamp": "2026-11-12T08:37:16.163Z",
+      "request_id": "FPT-ORD-102903",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/2 ngày), trong ngân sách và chiết khấu 5% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 7,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-102903",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Trung gửi báo giá chính thức cho KH-TECH-00732 (Đà Nẵng) và theo dõi xác nhận PO.",
+        "owner": "Miền Trung",
+        "draft_length": 630
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 8,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-111982",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 3 Sạc Anker Nano II 65W (FPT-P0021). Ngân sách 2.467.500 VNĐ, thời hạn triển khai trong 5 ngày, đề nghị chiết khấu 1..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 2467500,
+        "deadline_days": 5,
+        "discount_pct": 12,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 9,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-111982",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0021"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0021",
+        "unit_price": 890000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 10,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-111982",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0021",
+        "requested_qty": 3
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 3,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 3)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 11,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-111982",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 5,
+        "item_skus": [
+          "FPT-P0021"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 6,
+        "deadline_days": 5,
+        "gap_days": 1,
+        "reason": "Không kịp thời hạn (cần 6 ngày > yêu cầu 5 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 12,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-111982",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 2670000,
+        "requested_discount_pct": 12,
+        "budget_vnd": 2467500
+      },
+      "output": {
+        "final_total": 2349600,
+        "within_budget": true,
+        "requires_approval": true,
+        "approver_required": "Trưởng phòng Kinh doanh",
+        "policy_id": "POL-DISC-MGR"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 13,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-111982",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": true
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 6 ngày > yêu cầu 5 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 14,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-111982",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-00567 (Hải Phòng).",
+        "owner": "Miền Bắc",
+        "draft_length": 448
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 15,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-102633",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 4 Pin dự phòng MagSafe 10000mAh (FPT-P0022). Ngân sách 4.998.000 VNĐ, thời hạn triển khai trong 4 ngày, đề nghị chiế..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 4998000,
+        "deadline_days": 4,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 16,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-102633",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0022"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0022",
+        "unit_price": 1190000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 17,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-102633",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0022",
+        "requested_qty": 4
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 4,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 4)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 18,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-102633",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FPT-P0022"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 4,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 19,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-102633",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 4760000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 4998000
+      },
+      "output": {
+        "final_total": 4760000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 20,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-102633",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/4 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 21,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-102633",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00434 (Bà Rịa - Vũng Tàu) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 637
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 22,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-106572",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 6 Asus ROG Strix G16 (FPT-P0010). Ngân sách 220.437.000 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu 0%..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 220437000,
+        "deadline_days": 2,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 23,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-106572",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0010"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0010",
+        "unit_price": 34990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 24,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-106572",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0010",
+        "requested_qty": 6
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 6,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 6)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 25,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-106572",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0010"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 2,
+        "gap_days": 0,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 26,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-106572",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 209940000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 220437000
+      },
+      "output": {
+        "final_total": 209940000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 27,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-106572",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/2 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 28,
+      "timestamp": "2026-11-12T08:37:16.164Z",
+      "request_id": "FPT-ORD-106572",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00756 (Đồng Nai) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 622
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 29,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-103745",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 iPhone 13 128GB (FPT-P0003). Ngân sách 70.822.500 VNĐ, thời hạn triển khai trong 4 ngày, đề nghị chiết khấu 0%. Ng..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 70822500,
+        "deadline_days": 4,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 30,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-103745",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0003"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0003",
+        "unit_price": 13490000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 31,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-103745",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0003",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 32,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-103745",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FPT-P0003"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 4,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 33,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-103745",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 67450000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 70822500
+      },
+      "output": {
+        "final_total": 67450000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 34,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-103745",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/4 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 35,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-103745",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00389 (TP. Hồ Chí Minh) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 624
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 36,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105236",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 3 iPhone 15 Pro Max 256GB (FPT-P0001). Ngân sách 95.730.600 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 95730600,
+        "deadline_days": 2,
+        "discount_pct": 5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 37,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105236",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0001"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0001",
+        "unit_price": 31990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 38,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105236",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0001",
+        "requested_qty": 3
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 3,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 3)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 39,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105236",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0001"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 3,
+        "deadline_days": 2,
+        "gap_days": 1,
+        "reason": "Không kịp thời hạn (cần 3 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 40,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105236",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 95970000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 95730600
+      },
+      "output": {
+        "final_total": 91171500,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 41,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105236",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 3 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 42,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105236",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-01650 (Hà Nội).",
+        "owner": "Miền Bắc",
+        "draft_length": 445
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 43,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-106351",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 3 Apple Watch Series 9 GPS (FPT-P0024). Ngân sách 29.893.500 VNĐ, thời hạn triển khai trong 6 ngày, đề nghị chiết kh..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 29893500,
+        "deadline_days": 6,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 44,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-106351",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0024"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0024",
+        "unit_price": 9490000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 45,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-106351",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0024",
+        "requested_qty": 3
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 3,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 3)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 46,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-106351",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 6,
+        "item_skus": [
+          "FPT-P0024"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 6,
+        "gap_days": 4,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 6 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 47,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-106351",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 28470000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 29893500
+      },
+      "output": {
+        "final_total": 28470000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 48,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-106351",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/6 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 49,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-106351",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc gửi báo giá chính thức cho KH-TECH-00001 (Hải Phòng) và theo dõi xác nhận PO.",
+        "owner": "Miền Bắc",
+        "draft_length": 626
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 50,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-114899",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 iPhone 15 Pro Max 256GB (FPT-P0001). Ngân sách 167.947.500 VNĐ, thời hạn triển khai trong 5 ngày, đề nghị chiết kh..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 167947500,
+        "deadline_days": 5,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 51,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-114899",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0001"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0001",
+        "unit_price": 31990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 52,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-114899",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0001",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 53,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-114899",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 5,
+        "item_skus": [
+          "FPT-P0001"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 3,
+        "deadline_days": 5,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 3 ngày <= yêu cầu 5 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 54,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-114899",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 159950000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 167947500
+      },
+      "output": {
+        "final_total": 159950000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 55,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-114899",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (3/5 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 56,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-114899",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00253 (TP. Hồ Chí Minh) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 634
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 57,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105858",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 4 MacBook Pro M3 14 inch (FPT-P0014). Ngân sách 167.958.000 VNĐ, thời hạn triển khai trong 5 ngày, đề nghị chiết khấ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 167958000,
+        "deadline_days": 5,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 58,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105858",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0014"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0014",
+        "unit_price": 39990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 59,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105858",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0014",
+        "requested_qty": 4
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 4,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 4)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 60,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105858",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 5,
+        "item_skus": [
+          "FPT-P0014"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 3,
+        "deadline_days": 5,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 3 ngày <= yêu cầu 5 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 61,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105858",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 159960000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 167958000
+      },
+      "output": {
+        "final_total": 159960000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 62,
+      "timestamp": "2026-11-12T08:37:16.165Z",
+      "request_id": "FPT-ORD-105858",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (3/5 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 63,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-105858",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00020 (Bà Rịa - Vũng Tàu) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 635
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 64,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112290",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 4 Xiaomi 14 5G 256GB (FPT-P0007). Ngân sách 79.758.000 VNĐ, thời hạn triển khai trong 7 ngày, đề nghị chiết khấu 0%...."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 79758000,
+        "deadline_days": 7,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 65,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112290",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0007"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0007",
+        "unit_price": 18990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 66,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112290",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0007",
+        "requested_qty": 4
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 4,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 4)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 67,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112290",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 7,
+        "item_skus": [
+          "FPT-P0007"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 3,
+        "deadline_days": 7,
+        "gap_days": 4,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 3 ngày <= yêu cầu 7 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 68,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112290",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 75960000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 79758000
+      },
+      "output": {
+        "final_total": 75960000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 69,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112290",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (3/7 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 70,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112290",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00220 (Bình Dương) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 622
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 71,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102978",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 4 Samsung Galaxy A55 5G (FPT-P0006). Ngân sách 37.758.000 VNĐ, thời hạn triển khai trong 6 ngày, đề nghị chiết khấu ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 37758000,
+        "deadline_days": 6,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 72,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102978",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0006"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0006",
+        "unit_price": 8990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 73,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102978",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0006",
+        "requested_qty": 4
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 4,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 4)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 74,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102978",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 6,
+        "item_skus": [
+          "FPT-P0006"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 3,
+        "deadline_days": 6,
+        "gap_days": 3,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 3 ngày <= yêu cầu 6 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 75,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102978",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 35960000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 37758000
+      },
+      "output": {
+        "final_total": 35960000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 76,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102978",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (3/6 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 77,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102978",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00086 (Bà Rịa - Vũng Tàu) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 631
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 78,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102225",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 6 iPhone 13 128GB (FPT-P0003). Ngân sách 84.987.000 VNĐ, thời hạn triển khai trong 6 ngày, đề nghị chiết khấu 0%. Ng..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 84987000,
+        "deadline_days": 6,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 79,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102225",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0003"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0003",
+        "unit_price": 13490000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 80,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102225",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0003",
+        "requested_qty": 6
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 6,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 6)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 81,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102225",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 6,
+        "item_skus": [
+          "FPT-P0003"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 6,
+        "gap_days": 4,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 6 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 82,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102225",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 80940000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 84987000
+      },
+      "output": {
+        "final_total": 80940000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 83,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102225",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/6 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 84,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-102225",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00423 (Bình Dương) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 619
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 85,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112206",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 4 Acer Nitro 5 Tiger (FPT-P0011). Ngân sách 90.258.000 VNĐ, thời hạn triển khai trong 3 ngày, đề nghị chiết khấu 0%...."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 90258000,
+        "deadline_days": 3,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 86,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112206",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0011"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0011",
+        "unit_price": 21490000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 87,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112206",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0011",
+        "requested_qty": 4
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 4,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 4)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 88,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112206",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 3,
+        "item_skus": [
+          "FPT-P0011"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 3,
+        "deadline_days": 3,
+        "gap_days": 0,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 3 ngày <= yêu cầu 3 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 89,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112206",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 85960000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 90258000
+      },
+      "output": {
+        "final_total": 85960000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 90,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112206",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (3/3 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 91,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112206",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00533 (TP. Hồ Chí Minh) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 627
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 92,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-100841",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 6 Máy lọc không khí Xiaomi 4 Pro (FPT-P0028). Ngân sách 21.565.950 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị ch..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 21565950,
+        "deadline_days": 2,
+        "discount_pct": 12,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 93,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-100841",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0028"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0028",
+        "unit_price": 3890000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 94,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-100841",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0028",
+        "requested_qty": 6
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 6,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 6)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 95,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-100841",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0028"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 2,
+        "gap_days": 0,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 96,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-100841",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 23340000,
+        "requested_discount_pct": 12,
+        "budget_vnd": 21565950
+      },
+      "output": {
+        "final_total": 20539200,
+        "within_budget": true,
+        "requires_approval": true,
+        "approver_required": "Trưởng phòng Kinh doanh",
+        "policy_id": "POL-DISC-MGR"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 97,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-100841",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": true
+      },
+      "output": {
+        "status": "Chờ duyệt",
+        "reasons": [
+          "Đề nghị chiết khấu 12% vượt quyền NVKD (tối đa 10%). Cần Trưởng phòng Kinh doanh phê duyệt theo POL-DISC-MGR."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 98,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-100841",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chờ duyệt",
+        "has_approval_slip": true
+      },
+      "output": {
+        "next_step": "Chuyển Phiếu duyệt cho Trưởng phòng Kinh doanh; tạm giữ báo giá, KHÔNG tự xác nhận bán hàng trước khi có phê duyệt.",
+        "owner": "Miền Bắc -> Trưởng phòng Kinh doanh",
+        "draft_length": 412
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 99,
+      "timestamp": "2026-11-12T08:37:16.166Z",
+      "request_id": "FPT-ORD-112157",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 Samsung Galaxy Watch6 (FPT-P0025). Ngân sách 29.874.600 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 29874600,
+        "deadline_days": 2,
+        "discount_pct": 5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 100,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-112157",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0025"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0025",
+        "unit_price": 5990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 101,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-112157",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0025",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 102,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-112157",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0025"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 4,
+        "deadline_days": 2,
+        "gap_days": 2,
+        "reason": "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 103,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-112157",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 29950000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 29874600
+      },
+      "output": {
+        "final_total": 28452500,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 104,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-112157",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 105,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-112157",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-02393 (Quảng Ninh).",
+        "owner": "Miền Bắc",
+        "draft_length": 449
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 106,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-113782",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 3 Xiaomi 14 5G 256GB (FPT-P0007). Ngân sách 59.818.500 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu 0%...."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 59818500,
+        "deadline_days": 2,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 107,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-113782",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0007"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0007",
+        "unit_price": 18990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 108,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-113782",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0007",
+        "requested_qty": 3
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 3,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 3)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 109,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-113782",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0007"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 3,
+        "deadline_days": 2,
+        "gap_days": 1,
+        "reason": "Không kịp thời hạn (cần 3 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 110,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-113782",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 56970000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 59818500
+      },
+      "output": {
+        "final_total": 56970000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 111,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-113782",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 3 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 112,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-113782",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Trung phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-00837 (Khánh Hòa).",
+        "owner": "Miền Trung",
+        "draft_length": 450
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 113,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-107850",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 2 Samsung Galaxy Z Flip5 (FPT-P0005). Ngân sách 37.779.000 VNĐ, thời hạn triển khai trong 4 ngày, đề nghị chiết khấu..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 37779000,
+        "deadline_days": 4,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 114,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-107850",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0005"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0005",
+        "unit_price": 17990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 115,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-107850",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0005",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 116,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-107850",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FPT-P0005"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 4,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 117,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-107850",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 35980000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 37779000
+      },
+      "output": {
+        "final_total": 35980000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 118,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-107850",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/4 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 119,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-107850",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc gửi báo giá chính thức cho KH-TECH-00707 (Hải Phòng) và theo dõi xác nhận PO.",
+        "owner": "Miền Bắc",
+        "draft_length": 625
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 120,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-109192",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 3 Cáp Baseus Type-C 100W (FPT-P0023). Ngân sách 787.500 VNĐ, thời hạn triển khai trong 4 ngày, đề nghị chiết khấu 0%..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 787500,
+        "deadline_days": 4,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 121,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-109192",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0023"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0023",
+        "unit_price": 250000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 122,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-109192",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0023",
+        "requested_qty": 3
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 3,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 3)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 123,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-109192",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FPT-P0023"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 4,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 124,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-109192",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 750000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 787500
+      },
+      "output": {
+        "final_total": 750000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 125,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-109192",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/4 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 126,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-109192",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-03251 (Bà Rịa - Vũng Tàu) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 624
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 127,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-105639",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 2 OPPO Reno11 F 5G (FPT-P0009). Ngân sách 14.263.200 VNĐ, thời hạn triển khai trong 4 ngày, đề nghị chiết khấu 20%. ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 14263200,
+        "deadline_days": 4,
+        "discount_pct": 20,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 128,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-105639",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0009"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0009",
+        "unit_price": 8490000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 129,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-105639",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0009",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 130,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-105639",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FPT-P0009"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 4,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 131,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-105639",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 16980000,
+        "requested_discount_pct": 20,
+        "budget_vnd": 14263200
+      },
+      "output": {
+        "final_total": 13584000,
+        "within_budget": true,
+        "requires_approval": true,
+        "approver_required": "Trưởng phòng Kinh doanh",
+        "policy_id": "POL-DISC-MGR"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 132,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-105639",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": true
+      },
+      "output": {
+        "status": "Chờ duyệt",
+        "reasons": [
+          "Đề nghị chiết khấu 20% vượt quyền NVKD (tối đa 10%). Cần Trưởng phòng Kinh doanh phê duyệt theo POL-DISC-MGR."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 133,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-105639",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chờ duyệt",
+        "has_approval_slip": true
+      },
+      "output": {
+        "next_step": "Chuyển Phiếu duyệt cho Trưởng phòng Kinh doanh; tạm giữ báo giá, KHÔNG tự xác nhận bán hàng trước khi có phê duyệt.",
+        "owner": "Miền Bắc -> Trưởng phòng Kinh doanh",
+        "draft_length": 411
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 134,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-103224",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 Sạc Anker Nano II 65W (FPT-P0021). Ngân sách 4.439.400 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu 5..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 4439400,
+        "deadline_days": 2,
+        "discount_pct": 5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 135,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-103224",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0021"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0021",
+        "unit_price": 890000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 136,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-103224",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0021",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 137,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-103224",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0021"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 6,
+        "deadline_days": 2,
+        "gap_days": 4,
+        "reason": "Không kịp thời hạn (cần 6 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 138,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-103224",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 4450000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 4439400
+      },
+      "output": {
+        "final_total": 4227500,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 139,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-103224",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 6 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 140,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-103224",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-01209 (Đồng Nai).",
+        "owner": "Miền Nam",
+        "draft_length": 447
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 141,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-110250",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 Xiaomi 14 5G 256GB (FPT-P0007). Ngân sách 94.712.100 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu 5%...."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 94712100,
+        "deadline_days": 2,
+        "discount_pct": 5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 142,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-110250",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0007"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0007",
+        "unit_price": 18990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 143,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-110250",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0007",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 144,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-110250",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0007"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 3,
+        "deadline_days": 2,
+        "gap_days": 1,
+        "reason": "Không kịp thời hạn (cần 3 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 145,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-110250",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 94950000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 94712100
+      },
+      "output": {
+        "final_total": 90202500,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 146,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-110250",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 3 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 147,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-110250",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-00551 (Cần Thơ).",
+        "owner": "Miền Nam",
+        "draft_length": 446
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 148,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-104552",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 4 Lenovo Legion 5 (FPT-P0012). Ngân sách 111.680.100 VNĐ, thời hạn triển khai trong 4 ngày, đề nghị chiết khấu 5%. N..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 111680100,
+        "deadline_days": 4,
+        "discount_pct": 5,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 149,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-104552",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0012"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0012",
+        "unit_price": 27990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 150,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-104552",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0012",
+        "requested_qty": 4
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 4,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 4)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 151,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-104552",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FPT-P0012"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 4,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 152,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-104552",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 111960000,
+        "requested_discount_pct": 5,
+        "budget_vnd": 111680100
+      },
+      "output": {
+        "final_total": 106362000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 153,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-104552",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/4 ngày), trong ngân sách và chiết khấu 5% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 154,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-104552",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Trung gửi báo giá chính thức cho KH-TECH-00731 (Đà Nẵng) và theo dõi xác nhận PO.",
+        "owner": "Miền Trung",
+        "draft_length": 628
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 155,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-111770",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 2 Lenovo Legion 5 (FPT-P0012). Ngân sách 49.962.150 VNĐ, thời hạn triển khai trong 4 ngày, đề nghị chiết khấu 15%. N..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 49962150,
+        "deadline_days": 4,
+        "discount_pct": 15,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 156,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-111770",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0012"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0012",
+        "unit_price": 27990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 157,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-111770",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0012",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 158,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-111770",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FPT-P0012"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 4,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 159,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-111770",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 55980000,
+        "requested_discount_pct": 15,
+        "budget_vnd": 49962150
+      },
+      "output": {
+        "final_total": 47583000,
+        "within_budget": true,
+        "requires_approval": true,
+        "approver_required": "Trưởng phòng Kinh doanh",
+        "policy_id": "POL-DISC-MGR"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 160,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-111770",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": true
+      },
+      "output": {
+        "status": "Chờ duyệt",
+        "reasons": [
+          "Đề nghị chiết khấu 15% vượt quyền NVKD (tối đa 10%). Cần Trưởng phòng Kinh doanh phê duyệt theo POL-DISC-MGR."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 161,
+      "timestamp": "2026-11-12T08:37:16.167Z",
+      "request_id": "FPT-ORD-111770",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chờ duyệt",
+        "has_approval_slip": true
+      },
+      "output": {
+        "next_step": "Chuyển Phiếu duyệt cho Trưởng phòng Kinh doanh; tạm giữ báo giá, KHÔNG tự xác nhận bán hàng trước khi có phê duyệt.",
+        "owner": "Miền Bắc -> Trưởng phòng Kinh doanh",
+        "draft_length": 411
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 162,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114322",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 3 Samsung Galaxy Watch6 (FPT-P0025). Ngân sách 18.868.500 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 18868500,
+        "deadline_days": 2,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 163,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114322",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0025"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0025",
+        "unit_price": 5990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 164,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114322",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0025",
+        "requested_qty": 3
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 3,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 3)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 165,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114322",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0025"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 4,
+        "deadline_days": 2,
+        "gap_days": 2,
+        "reason": "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 166,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114322",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 17970000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 18868500
+      },
+      "output": {
+        "final_total": 17970000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 167,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114322",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 168,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114322",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-03424 (Hải Phòng).",
+        "owner": "Miền Bắc",
+        "draft_length": 448
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 169,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-112990",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 Samsung Galaxy A55 5G (FPT-P0006). Ngân sách 47.197.500 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 47197500,
+        "deadline_days": 2,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 170,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-112990",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0006"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0006",
+        "unit_price": 8990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 171,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-112990",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0006",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 172,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-112990",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0006"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 3,
+        "deadline_days": 2,
+        "gap_days": 1,
+        "reason": "Không kịp thời hạn (cần 3 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 173,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-112990",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 44950000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 47197500
+      },
+      "output": {
+        "final_total": 44950000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 174,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-112990",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 3 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 175,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-112990",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-00592 (Hải Phòng).",
+        "owner": "Miền Bắc",
+        "draft_length": 448
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 176,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-107789",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 6 Garmin Forerunner 55 (FPT-P0026). Ngân sách 30.807.000 VNĐ, thời hạn triển khai trong 4 ngày, đề nghị chiết khấu 0..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 30807000,
+        "deadline_days": 4,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 177,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-107789",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0026"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0026",
+        "unit_price": 4890000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 178,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-107789",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0026",
+        "requested_qty": 6
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 6,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 6)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 179,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-107789",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FPT-P0026"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 4,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 180,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-107789",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 29340000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 30807000
+      },
+      "output": {
+        "final_total": 29340000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 181,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-107789",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/4 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 182,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-107789",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Trung gửi báo giá chính thức cho KH-TECH-00527 (Đà Nẵng) và theo dõi xác nhận PO.",
+        "owner": "Miền Trung",
+        "draft_length": 622
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 183,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-104487",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 4 Asus Vivobook 15 (FPT-P0017). Ngân sách 54.558.000 VNĐ, thời hạn triển khai trong 4 ngày, đề nghị chiết khấu 0%. N..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 54558000,
+        "deadline_days": 4,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 184,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-104487",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0017"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0017",
+        "unit_price": 12990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 185,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-104487",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0017",
+        "requested_qty": 4
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 4,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 4)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 186,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-104487",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 4,
+        "item_skus": [
+          "FPT-P0017"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 4,
+        "deadline_days": 4,
+        "gap_days": 0,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 4 ngày <= yêu cầu 4 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 187,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-104487",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 51960000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 54558000
+      },
+      "output": {
+        "final_total": 51960000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 188,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-104487",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (4/4 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 189,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-104487",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00773 (Cần Thơ) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 617
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 190,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108280",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 2 Loa JBL Flip 6 (FPT-P0020). Ngân sách 5.649.000 VNĐ, thời hạn triển khai trong 5 ngày, đề nghị chiết khấu 0%. Ngườ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 5649000,
+        "deadline_days": 5,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 191,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108280",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0020"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0020",
+        "unit_price": 2690000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 192,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108280",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0020",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 193,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108280",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 5,
+        "item_skus": [
+          "FPT-P0020"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 4,
+        "deadline_days": 5,
+        "gap_days": 1,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 4 ngày <= yêu cầu 5 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 194,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108280",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 5380000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 5649000
+      },
+      "output": {
+        "final_total": 5380000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 195,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108280",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (4/5 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 196,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108280",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00056 (Đồng Nai) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 613
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 197,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-113672",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 6 Tai nghe Sony WH-1000XM5 (FPT-P0019). Ngân sách 50.337.000 VNĐ, thời hạn triển khai trong 5 ngày, đề nghị chiết kh..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 50337000,
+        "deadline_days": 5,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 198,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-113672",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0019"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0019",
+        "unit_price": 7990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 199,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-113672",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0019",
+        "requested_qty": 6
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 6,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 6)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 200,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-113672",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 5,
+        "item_skus": [
+          "FPT-P0019"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 5,
+        "gap_days": 3,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 5 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 201,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-113672",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 47940000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 50337000
+      },
+      "output": {
+        "final_total": 47940000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 202,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-113672",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/5 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 203,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-113672",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc gửi báo giá chính thức cho KH-TECH-00235 (Bắc Ninh) và theo dõi xác nhận PO.",
+        "owner": "Miền Bắc",
+        "draft_length": 625
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 204,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108313",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 6 Garmin Forerunner 55 (FPT-P0026). Ngân sách 30.807.000 VNĐ, thời hạn triển khai trong 5 ngày, đề nghị chiết khấu 0..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 30807000,
+        "deadline_days": 5,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 205,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108313",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0026"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0026",
+        "unit_price": 4890000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 206,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108313",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0026",
+        "requested_qty": 6
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 6,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 6)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 207,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108313",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 5,
+        "item_skus": [
+          "FPT-P0026"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 5,
+        "gap_days": 3,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 5 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 208,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108313",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 29340000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 30807000
+      },
+      "output": {
+        "final_total": 29340000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 209,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108313",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/5 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 210,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-108313",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00114 (Bình Dương) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 623
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 211,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114406",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 3 HP Pavilion 14 (FPT-P0016). Ngân sách 51.943.500 VNĐ, thời hạn triển khai trong 6 ngày, đề nghị chiết khấu 0%. Ngư..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 51943500,
+        "deadline_days": 6,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 212,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114406",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0016"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0016",
+        "unit_price": 16490000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 213,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114406",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0016",
+        "requested_qty": 3
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 3,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 3)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 214,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114406",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 6,
+        "item_skus": [
+          "FPT-P0016"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 3,
+        "deadline_days": 6,
+        "gap_days": 3,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 3 ngày <= yêu cầu 6 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 215,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114406",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 49470000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 51943500
+      },
+      "output": {
+        "final_total": 49470000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 216,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114406",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (3/6 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 217,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-114406",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc gửi báo giá chính thức cho KH-TECH-00641 (Hải Phòng) và theo dõi xác nhận PO.",
+        "owner": "Miền Bắc",
+        "draft_length": 617
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 218,
+      "timestamp": "2026-11-12T08:37:16.168Z",
+      "request_id": "FPT-ORD-102183",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 Asus Vivobook 15 (FPT-P0017). Ngân sách 68.197.500 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu 0%. N..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 68197500,
+        "deadline_days": 2,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 219,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-102183",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0017"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0017",
+        "unit_price": 12990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 220,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-102183",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0017",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 221,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-102183",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0017"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 4,
+        "deadline_days": 2,
+        "gap_days": 2,
+        "reason": "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 222,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-102183",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 64950000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 68197500
+      },
+      "output": {
+        "final_total": 64950000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 223,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-102183",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 224,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-102183",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Trung phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-00397 (Đà Nẵng).",
+        "owner": "Miền Trung",
+        "draft_length": 448
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 225,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-113908",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 Samsung Galaxy Watch6 (FPT-P0025). Ngân sách 31.447.500 VNĐ, thời hạn triển khai trong 6 ngày, đề nghị chiết khấu ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 31447500,
+        "deadline_days": 6,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 226,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-113908",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0025"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0025",
+        "unit_price": 5990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 227,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-113908",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0025",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 228,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-113908",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 6,
+        "item_skus": [
+          "FPT-P0025"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 4,
+        "deadline_days": 6,
+        "gap_days": 2,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 4 ngày <= yêu cầu 6 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 229,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-113908",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 29950000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 31447500
+      },
+      "output": {
+        "final_total": 29950000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 230,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-113908",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (4/6 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 231,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-113908",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Bắc gửi báo giá chính thức cho KH-TECH-00089 (Hải Phòng) và theo dõi xác nhận PO.",
+        "owner": "Miền Bắc",
+        "draft_length": 623
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 232,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-100857",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 3 Acer Nitro 5 Tiger (FPT-P0011). Ngân sách 67.693.500 VNĐ, thời hạn triển khai trong 6 ngày, đề nghị chiết khấu 0%...."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 67693500,
+        "deadline_days": 6,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 233,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-100857",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0011"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0011",
+        "unit_price": 21490000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 234,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-100857",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0011",
+        "requested_qty": 3
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 3,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 3)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 235,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-100857",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 6,
+        "item_skus": [
+          "FPT-P0011"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 3,
+        "deadline_days": 6,
+        "gap_days": 3,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 3 ngày <= yêu cầu 6 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 236,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-100857",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 64470000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 67693500
+      },
+      "output": {
+        "final_total": 64470000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 237,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-100857",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (3/6 ngày), trong ngân sách và chiết khấu 0% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 238,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-100857",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Trung gửi báo giá chính thức cho KH-TECH-00171 (Đà Nẵng) và theo dõi xác nhận PO.",
+        "owner": "Miền Trung",
+        "draft_length": 621
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 239,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-111618",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 2 Loa JBL Flip 6 (FPT-P0020). Ngân sách 4.970.700 VNĐ, thời hạn triển khai trong 5 ngày, đề nghị chiết khấu 12%. Ngư..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 4970700,
+        "deadline_days": 5,
+        "discount_pct": 12,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 240,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-111618",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0020"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0020",
+        "unit_price": 2690000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 241,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-111618",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0020",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 242,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-111618",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 5,
+        "item_skus": [
+          "FPT-P0020"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 4,
+        "deadline_days": 5,
+        "gap_days": 1,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 4 ngày <= yêu cầu 5 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 243,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-111618",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 5380000,
+        "requested_discount_pct": 12,
+        "budget_vnd": 4970700
+      },
+      "output": {
+        "final_total": 4734400,
+        "within_budget": true,
+        "requires_approval": true,
+        "approver_required": "Trưởng phòng Kinh doanh",
+        "policy_id": "POL-DISC-MGR"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 244,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-111618",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": true
+      },
+      "output": {
+        "status": "Chờ duyệt",
+        "reasons": [
+          "Đề nghị chiết khấu 12% vượt quyền NVKD (tối đa 10%). Cần Trưởng phòng Kinh doanh phê duyệt theo POL-DISC-MGR."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 245,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-111618",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chờ duyệt",
+        "has_approval_slip": true
+      },
+      "output": {
+        "next_step": "Chuyển Phiếu duyệt cho Trưởng phòng Kinh doanh; tạm giữ báo giá, KHÔNG tự xác nhận bán hàng trước khi có phê duyệt.",
+        "owner": "Miền Bắc -> Trưởng phòng Kinh doanh",
+        "draft_length": 413
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 246,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-106353",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 2 Garmin Forerunner 55 (FPT-P0026). Ngân sách 9.447.900 VNĐ, thời hạn triển khai trong 5 ngày, đề nghị chiết khấu 8%..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 9447900,
+        "deadline_days": 5,
+        "discount_pct": 8,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 247,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-106353",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0026"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0026",
+        "unit_price": 4890000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 248,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-106353",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0026",
+        "requested_qty": 2
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 2,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 2)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 249,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-106353",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 5,
+        "item_skus": [
+          "FPT-P0026"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 5,
+        "gap_days": 3,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 5 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 250,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-106353",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 9780000,
+        "requested_discount_pct": 8,
+        "budget_vnd": 9447900
+      },
+      "output": {
+        "final_total": 8997600,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 251,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-106353",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/5 ngày), trong ngân sách và chiết khấu 8% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 252,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-106353",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam gửi báo giá chính thức cho KH-TECH-00085 (Bà Rịa - Vũng Tàu) và theo dõi xác nhận PO.",
+        "owner": "Miền Nam",
+        "draft_length": 634
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 253,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114401",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 Samsung Galaxy Watch6 (FPT-P0025). Ngân sách 31.447.500 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 31447500,
+        "deadline_days": 2,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 254,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114401",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0025"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0025",
+        "unit_price": 5990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 255,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114401",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0025",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 256,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114401",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0025"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 4,
+        "deadline_days": 2,
+        "gap_days": 2,
+        "reason": "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 257,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114401",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 29950000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 31447500
+      },
+      "output": {
+        "final_total": 29950000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 258,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114401",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 259,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114401",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Nam phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-02075 (TP. Hồ Chí Minh).",
+        "owner": "Miền Nam",
+        "draft_length": 454
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 260,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-112177",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 6 Samsung Galaxy Watch6 (FPT-P0025). Ngân sách 37.737.000 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu ..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 37737000,
+        "deadline_days": 2,
+        "discount_pct": 0,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 261,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-112177",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0025"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0025",
+        "unit_price": 5990000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 262,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-112177",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0025",
+        "requested_qty": 6
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 6,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 6)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 263,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-112177",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0025"
+        ]
+      },
+      "output": {
+        "feasible": false,
+        "max_lead_time_days": 4,
+        "deadline_days": 2,
+        "gap_days": 2,
+        "reason": "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 264,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-112177",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 35940000,
+        "requested_discount_pct": 0,
+        "budget_vnd": 37737000
+      },
+      "output": {
+        "final_total": 35940000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 265,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-112177",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": false,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Chưa đáp ứng",
+        "reasons": [
+          "Không kịp thời hạn (cần 4 ngày > yêu cầu 2 ngày)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 266,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-112177",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Chưa đáp ứng",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Trung phối hợp Bộ phận Vận hành đề xuất phương án thay thế (chia đợt giao hàng / điều chỉnh tiến độ hoặc cấu hình) cho KH-TECH-00538 (Thừa Thiên Huế).",
+        "owner": "Miền Trung",
+        "draft_length": 455
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 267,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-107472",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 6 iPhone 13 128GB (FPT-P0003). Ngân sách 78.188.250 VNĐ, thời hạn triển khai trong 2 ngày, đề nghị chiết khấu 8%. Ng..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 78188250,
+        "deadline_days": 2,
+        "discount_pct": 8,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 268,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-107472",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0003"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0003",
+        "unit_price": 13490000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 269,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-107472",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0003",
+        "requested_qty": 6
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 6,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 6)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 270,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-107472",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 2,
+        "item_skus": [
+          "FPT-P0003"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 2,
+        "deadline_days": 2,
+        "gap_days": 0,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 2 ngày <= yêu cầu 2 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 271,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-107472",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 80940000,
+        "requested_discount_pct": 8,
+        "budget_vnd": 78188250
+      },
+      "output": {
+        "final_total": 74464800,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 272,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-107472",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (2/2 ngày), trong ngân sách và chiết khấu 8% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 273,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-107472",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Trung gửi báo giá chính thức cho KH-TECH-00127 (Nghệ An) và theo dõi xác nhận PO.",
+        "owner": "Miền Trung",
+        "draft_length": 626
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    },
+    {
+      "seq": 274,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114464",
+      "skill": "Skill 1: Bóc tách yêu cầu",
+      "tool": "extract_requirements",
+      "input": {
+        "raw_text_preview": "Cần 5 Loa JBL Flip 6 (FPT-P0020). Ngân sách 12.710.250 VNĐ, thời hạn triển khai trong 5 ngày, đề nghị chiết khấu 10%. Ng..."
+      },
+      "output": {
+        "items_count": 1,
+        "budget_vnd": 12710250,
+        "deadline_days": 5,
+        "discount_pct": 10,
+        "missing_fields": [
+
+        ]
+      },
+      "rule_applied": "Trích xuất thực thể & kiểm tra trường bắt buộc"
+    },
+    {
+      "seq": 275,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114464",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_lookup_product",
+      "input": {
+        "query": "FPT-P0020"
+      },
+      "output": {
+        "found": true,
+        "match_type": "exact_sku",
+        "sku": "FPT-P0020",
+        "unit_price": 2690000
+      },
+      "rule_applied": "Tra cứu bảng giá hiện hành"
+    },
+    {
+      "seq": 276,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114464",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_inventory",
+      "input": {
+        "sku": "FPT-P0020",
+        "requested_qty": 5
+      },
+      "output": {
+        "sufficient": true,
+        "available_stock": 10,
+        "requested_qty": 5,
+        "shortfall": 0,
+        "reason": "Đủ tồn kho (10 >= 5)"
+      },
+      "rule_applied": "Kiểm tra tồn khả dụng >= số lượng đặt"
+    },
+    {
+      "seq": 277,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114464",
+      "skill": "Skill 2: Đối chiếu Danh mục & Tồn kho",
+      "tool": "tool_check_lead_time",
+      "input": {
+        "deadline_days": 5,
+        "item_skus": [
+          "FPT-P0020"
+        ]
+      },
+      "output": {
+        "feasible": true,
+        "max_lead_time_days": 4,
+        "deadline_days": 5,
+        "gap_days": 1,
+        "reason": "Đáp ứng kịp thời hạn (triển khai 4 ngày <= yêu cầu 5 ngày)"
+      },
+      "rule_applied": "Kiểm tra max(lead_time_days) <= thời hạn yêu cầu"
+    },
+    {
+      "seq": 278,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114464",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "tool_calculate_pricing_and_policy",
+      "input": {
+        "subtotal": 13450000,
+        "requested_discount_pct": 10,
+        "budget_vnd": 12710250
+      },
+      "output": {
+        "final_total": 12105000,
+        "within_budget": true,
+        "requires_approval": false,
+        "approver_required": null,
+        "policy_id": "POL-DISC-REP"
+      },
+      "rule_applied": "Ngưỡng NVKD <= 10%; Vượt quyền -> chuyển duyệt"
+    },
+    {
+      "seq": 279,
+      "timestamp": "2026-11-12T08:37:16.169Z",
+      "request_id": "FPT-ORD-114464",
+      "skill": "Skill 3: Tính giá & Kiểm tra chính sách",
+      "tool": "classify_opportunity_status",
+      "input": {
+        "unknown_count": 0,
+        "missing_count": 0,
+        "stock_short_count": 0,
+        "lead_feasible": true,
+        "requires_approval": false
+      },
+      "output": {
+        "status": "Có thể tiếp tục",
+        "reasons": [
+          "Đủ thông tin, đủ tồn kho, kịp thời hạn (4/5 ngày), trong ngân sách và chiết khấu 10% nằm trong quyền NVKD (<= 10%)."
+        ],
+        "auto_confirmed_sale": false
+      },
+      "rule_applied": "Guardrail: Không tự xác nhận bán hàng khi chưa đủ dữ kiện hoặc vượt quyền"
+    },
+    {
+      "seq": 280,
+      "timestamp": "2026-11-12T08:37:16.170Z",
+      "request_id": "FPT-ORD-114464",
+      "skill": "Skill 4: Xuất hồ sơ & Bản nháp",
+      "tool": "generate_dossier_and_drafts",
+      "input": {
+        "status": "Có thể tiếp tục",
+        "has_approval_slip": false
+      },
+      "output": {
+        "next_step": "Miền Trung gửi báo giá chính thức cho KH-TECH-01548 (Khánh Hòa) và theo dõi xác nhận PO.",
+        "owner": "Miền Trung",
+        "draft_length": 627
+      },
+      "rule_applied": "Sinh hồ sơ cơ hội, bản nháp phản hồi & phiếu chuyển duyệt"
+    }
+  ]
+}

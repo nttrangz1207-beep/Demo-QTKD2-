@@ -1,0 +1,6 @@
+sku,name,category,unit_price,available_stock,lead_time_days
+SRV-DELL-R750,Máy chủ Dell PowerEdge R750,Thiết bị hạ tầng,120000000,8,7
+SW-CISCO-9200,Switch Cisco Catalyst 9200L 24-Port,Thiết bị mạng,45000000,15,5
+FW-FORTI-100F,Tường lửa FortiGate 100F,An toàn thông tin,65000000,6,6
+SVC-DEPLOY-PRO,Gói dịch vụ triển khai & cấu hình hệ thống,Dịch vụ kỹ thuật,25000000,20,4
+LAP-THINK-X1,Laptop Lenovo ThinkPad X1 Carbon,Thiết bị đầu cuối,38000000,12,3
