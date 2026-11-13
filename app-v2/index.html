@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minh An B2B AI Agent — Forest Sage Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="lotus-icon" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3c2 3 3 6 3 9a3 3 0 1 1-6 0c0-3 1-6 3-9z"/>
+          <path d="M5 10c2.5 1 4.5 3.5 5 6.5-3 .5-5.5-1-6.5-3.5-.4-1-.2-2.2 1.5-3z"/>
+          <path d="M19 10c-2.5 1-4.5 3.5-5 6.5 3 .5 5.5-1 6.5-3.5.4-1 .2-2.2-1.5-3z"/>
+          <path d="M4 19h16"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Minh An B2B Sales AI Agent</h1>
+        <p>AI301 Đề 01 • Điều phối 4 Kỹ năng (Bóc tách → Kho/Giá/Lead-time → Chính sách → Hồ sơ & Bản nháp)</p>
+      </div>
+    </div>
+    <div class="pill-guardrail">Guardrail: Không tự xác nhận bán hàng khi thiếu dữ kiện hoặc vượt quyền</div>
+  </header>
+
+  <main class="container">
+    <!-- NẠP DỮ LIỆU & CẤU HÌNH -->
+    <section class="card">
+      <div class="card-header">
+        <h2>1. Nguồn Dữ Liệu & Chế Độ Agent</h2>
+        <div class="row">
+          <button id="btnLoadSample" class="btn btn-ghost btn-sm">Nạp dữ liệu mẫu (12 cơ hội)</button>
+          <button id="btnDownloadTemplate" class="btn btn-ghost btn-sm">Tải file .XLSX mẫu</button>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="input-tile">
+          <label for="gsheetUrl">Link Google Sheet (Công khai)</label>
+          <div class="row">
+            <input id="gsheetUrl" type="text" class="grow" placeholder="https://docs.google.com/spreadsheets/d/..." />
+            <button id="btnLoadGSheet" class="btn btn-sage btn-sm">Tải Sheet</button>
+          </div>
+          <p class="muted" style="margin:8px 0 0;">Hỗ trợ workbook nhiều tab (<code>requests</code>, <code>products</code>, <code>policies</code>).</p>
+        </div>
+
+        <div class="input-tile">
+          <label for="fileInput">Upload CSV hoặc Excel (.xlsx)</label>
+          <div class="row">
+            <input id="fileInput" type="file" accept=".csv,.xlsx,.xls,.json" multiple />
+          </div>
+          <p class="muted" style="margin:8px 0 0;">Chọn 1 file <code>.xlsx</code> nhiều sheet hoặc nhiều file <code>.csv</code> cùng lúc.</p>
+        </div>
+
+        <div class="input-tile">
+          <label for="llmProvider">Chế độ xử lý AI Agent</label>
+          <div class="row">
+            <select id="llmProvider">
+              <option value="offline">Deterministic NLP + Rule Engine (Offline)</option>
+              <option value="gemini">Gemini API (NLP + Rule Tools)</option>
+              <option value="openai">OpenAI API (GPT-4o-mini + Rule Tools)</option>
+            </select>
+            <input id="llmApiKey" type="password" class="grow" placeholder="API Key (nếu dùng Gemini/OpenAI)" style="display:none;" />
+          </div>
+          <p class="muted" style="margin:8px 0 0;">Mọi bước tra giá, tồn kho, chiết khấu đều ghi Audit Log truy vết.</p>
+        </div>
+      </div>
+
+      <div class="status-ribbon">
+        <div id="datasetSummary">Chưa có dữ liệu. Hãy nạp dữ liệu mẫu, dán link Google Sheet hoặc upload file CSV/XLSX.</div>
+        <div class="row">
+          <button id="btnRunAgent" class="btn btn-mint" disabled>Chạy AI Agent (4 Kỹ năng)</button>
+          <button id="btnRunSelfTest" class="btn btn-ghost">Chạy Self-Test (Task 2)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUTPUT TRỰC TIẾP TRÊN GIAO DIỆN -->
+    <section class="card">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-overview">Tổng quan & Đề xuất Kinh doanh</button>
+        <button class="tab-btn" data-tab="tab-dossiers">Hồ sơ Cơ hội & Bản nháp</button>
+        <button class="tab-btn" data-tab="tab-audit">Nhật ký Truy vết (Audit Log)</button>
+        <button class="tab-btn" data-tab="tab-selftest">Kiểm thử (Self-Test) & Dữ liệu nguồn</button>
+      </div>
+
+      <!-- TAB 1: TỔNG QUAN -->
+      <div id="tab-overview" class="tab-panel active">
+        <div id="overviewEmpty" class="muted">Hãy nạp dữ liệu và bấm <strong>"Chạy AI Agent (4 Kỹ năng)"</strong> để xem kết quả phân tích trực tiếp.</div>
+        <div id="overviewContent" style="display:none;">
+          <div class="session-grid" id="kpiGrid"></div>
+
+          <div class="split-layout">
+            <div class="sub-card">
+              <h3>Phân bổ Cơ hội & Giá trị Pipeline</h3>
+              <div id="pipelineBars" style="margin-bottom:14px;"></div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Trạng thái</th>
+                    <th>Số lượng</th>
+                    <th>Tổng giá trị</th>
+                    <th>Tính Pipeline?</th>
+                  </tr>
+                </thead>
+                <tbody id="summaryTableBody"></tbody>
+              </table>
+            </div>
+
+            <div class="sub-card">
+              <h3>Đề xuất Kinh doanh cho Trưởng phòng</h3>
+              <ul id="businessRecommendations" class="rec-list"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: HỒ SƠ CƠ HỘI -->
+      <div id="tab-dossiers" class="tab-panel">
+        <div class="row" style="margin-bottom:14px;">
+          <select id="filterStatus">
+            <option value="ALL">Tất cả trạng thái</option>
+            <option value="Có thể tiếp tục">Có thể tiếp tục</option>
+            <option value="Chờ duyệt">Chờ duyệt</option>
+            <option value="Cần bổ sung thông tin">Cần bổ sung thông tin</option>
+            <option value="Chưa đáp ứng">Chưa đáp ứng</option>
+          </select>
+          <input id="searchOpp" type="text" class="grow" placeholder="Tìm theo Mã YC, Khách hàng, NVKD..." />
+        </div>
+
+        <div class="split-layout">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã YC</th>
+                  <th>Khách hàng & NVKD</th>
+                  <th>Trạng thái</th>
+                  <th>Giá trị đề xuất</th>
+                  <th>Chi tiết</th>
+                </tr>
+              </thead>
+              <tbody id="oppTableBody"></tbody>
+            </table>
+          </div>
+
+          <div id="dossierDetail" class="sub-card">
+            <p class="muted">Chọn một cơ hội bên trái để xem hồ sơ đối chiếu chi tiết, bản nháp phản hồi khách hàng và phiếu chuyển duyệt.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: AUDIT LOG -->
+      <div id="tab-audit" class="tab-panel">
+        <div class="row" style="margin-bottom:14px; justify-content:space-between;">
+          <div class="row">
+            <select id="filterLogReq">
+              <option value="ALL">Tất cả Mã Yêu cầu</option>
+            </select>
+            <span id="logSaveStatus" class="muted"></span>
+          </div>
+          <button id="btnExportLogs" class="btn btn-ghost btn-sm" disabled>Tải Audit Log (.json)</button>
+        </div>
+        <div style="overflow-x:auto; max-height:520px;">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Mã YC</th>
+                <th>Kỹ năng (Skill)</th>
+                <th>Công cụ (Tool)</th>
+                <th>Đầu vào / Đầu ra</th>
+                <th>Quy tắc áp dụng</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: SELF-TEST & SOURCE DATA -->
+      <div id="tab-selftest" class="tab-panel">
+        <div id="selfTestResults" style="margin-bottom:18px;">
+          <p class="muted">Nhấn <strong>"Chạy Self-Test (Task 2)"</strong> để kiểm thử tự động các ca Thông thường, Thiếu dữ liệu và Ranh giới quy tắc.</p>
+        </div>
+        <div class="split-layout">
+          <div class="sub-card">
+            <h3>Danh mục sản phẩm, giá & tồn kho</h3>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead><tr><th>SKU</th><th>Tên sản phẩm</th><th>Đơn giá</th><th>Tồn</th><th>Lead-time</th></tr></thead>
+                <tbody id="catalogTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>Chính sách chiết khấu & chuyển duyệt</h3>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead><tr><th>Mã</th><th>Vai trò</th><th>CK tối đa</th><th>Người duyệt</th></tr></thead>
+                <tbody id="policyTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
+
